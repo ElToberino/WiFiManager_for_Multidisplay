@@ -216,7 +216,7 @@ WiFiManager::~WiFiManager() {
 void WiFiManager::_begin(){
   if(_hasBegun) return;
   _hasBegun = true;
-  // _usermode = WiFi.getMode();
+  _usermode = WiFi.getMode();
 
   #ifndef ESP32
   WiFi.persistent(false); // disable persistent so scannetworks and mode switching do not cause overwrites
@@ -262,7 +262,7 @@ boolean WiFiManager::autoConnect(char const *apName, char const *apPassword) {
   if(esp32persistent) WiFi.persistent(false); // disable persistent for esp32 after esp_wifi_start or else saves wont work
   #endif
 
-  _usermode = WIFI_STA; // When using autoconnect , assume the user wants sta mode on permanently.
+  _usermode = WIFI_STA;
 
   // no getter for autoreconnectpolicy before this
   // https://github.com/esp8266/Arduino/pull/4359
@@ -943,13 +943,14 @@ void WiFiManager::handleRoot() {
   DEBUG_WM(DEBUG_VERBOSE,F("<- HTTP Root"));
   if (captivePortal()) return; // If captive portal redirect instead of displaying the page
   handleRequest();
-  String page = getHTTPHead(FPSTR(S_options)); // @token options @todo replace options with title
+  String page = getHTTPHead(FPSTR(S_options)); // @token options
   String str  = FPSTR(HTTP_ROOT_MAIN);
   str.replace(FPSTR(T_v),configPortalActive ? _apName : WiFi.localIP().toString()); // use ip if ap is not active for heading
   page += str;
   page += FPSTR(HTTP_PORTAL_OPTIONS);
   page += getMenuOut();
-  reportStatus(page);
+  //reportStatus(page);                           ///CHANGE MULTIDISPLAY
+  page += FPSTR(HTTP_INFOLINK);					  ///CHANGE MULTIDISPLAY
   page += FPSTR(HTTP_END);
 
   server->sendHeader(FPSTR(HTTP_HEAD_CL), String(page.length()));
@@ -971,7 +972,9 @@ void WiFiManager::handleWifi(boolean scan) {
   if (scan) {
     // DEBUG_WM(DEBUG_DEV,"refresh flag:",server->hasArg(F("refresh")));
     WiFi_scanNetworks(server->hasArg(F("refresh")),false); //wifiscan, force if arg refresh
-    page += getScanItemOut();
+    page += FPSTR(HTTP_MULTIDISPLAY);							///CHANGE MULTIDISPLAY	
+	page += FPSTR(HTTP_WIFI_SELECT);                       		///CHANGE MULTIDISPLAY
+	page += getScanItemOut();
   }
   String pitem = "";
 
@@ -998,7 +1001,8 @@ void WiFiManager::handleWifi(boolean scan) {
   }
   page += FPSTR(HTTP_FORM_END);
   page += FPSTR(HTTP_SCAN_LINK);
-  reportStatus(page);
+  page += FPSTR(HTTP_BACKLINK);			///CHANGE MULTIDISPLAY
+  //reportStatus(page);                 ///CHANGE MULTIDISPLAY
   page += FPSTR(HTTP_END);
 
   server->sendHeader(FPSTR(HTTP_HEAD_CL), String(page.length()));
@@ -1450,8 +1454,9 @@ void WiFiManager::handleInfo() {
   DEBUG_WM(DEBUG_VERBOSE,F("<- HTTP Info"));
   handleRequest();
   String page = getHTTPHead(FPSTR(S_titleinfo)); // @token titleinfo
-  reportStatus(page);
-
+  //reportStatus(page);
+  page += FPSTR(HTTP_MULTIDISPLAY);					///CHANGE MULTIDISPLAY
+  page += FPSTR(HTTP_DEVICE_INFO);					///CHANGE MULTIDISPLAY
   uint16_t infos = 0;
 
   //@todo convert to enum or refactor to strings
@@ -1522,7 +1527,8 @@ void WiFiManager::handleInfo() {
   }
   page += F("</dl>");
   if(_showInfoErase) page += FPSTR(HTTP_ERASEBTN);
-  page += FPSTR(HTTP_HELP);
+  //page += FPSTR(HTTP_HELP);							/// CHANGE MULTIDISPLAY -> Don't show available pages
+  page += FPSTR(HTTP_BACKLINK);			///CHANGE MULTIDISPLAYS
   page += FPSTR(HTTP_END);
 
   server->sendHeader(FPSTR(HTTP_HEAD_CL), String(page.length()));
@@ -1725,12 +1731,21 @@ String WiFiManager::getInfoData(String id){
  * HTTPD CALLBACK root or redirect to captive portal
  */
 void WiFiManager::handleExit() {
+  String IP_temp = WiFi.softAPIP().toString();				///CHANGE MULTIDISPLAY
   DEBUG_WM(DEBUG_VERBOSE,F("<- HTTP Exit"));
   handleRequest();
   String page = getHTTPHead(FPSTR(S_titleexit)); // @token titleexit
-  page += FPSTR(S_exiting); // @token exiting
+  page += FPSTR(HTTP_MULTIDISPLAY);							///CHANGE MULTIDISPLAY
+  page += FPSTR(HTTP_CLOSING);								///CHANGE MULTIDISPLAY
+  page += FPSTR(HTTP_CLOSING_FWD_1);						///CHANGE MULTIDISPLAY
+  page += IP_temp;											///CHANGE MULTIDISPLAY
+  page += FPSTR(HTTP_CLOSING_FWD_2);						///CHANGE MULTIDISPLAY
+  page += IP_temp;											///CHANGE MULTIDISPLAY
+  page += FPSTR(HTTP_CLOSING_FWD_3);						///CHANGE MULTIDISPLAY
+  //page += FPSTR(S_exiting); // @token exiting															///CHANGE MULTIDISPLAY
   server->sendHeader(FPSTR(HTTP_HEAD_CL), String(page.length()));
   server->send(200, FPSTR(HTTP_HEAD_CT), page);
+  delay(200);												///CHANGE MULTIDISPLAY
   abort = true;
 }
 

@@ -17,17 +17,11 @@
 // !!! THIS DOES NOT WORK, you cannot define in a sketch, if anyone one knows how to order includes to be able to do this help!
 
 const char HTTP_HEAD_START[]       PROGMEM = "<!DOCTYPE html><html lang='en'><head><meta name='format-detection' content='telephone=no'><meta charset='UTF-8'><meta  name='viewport' content='width=device-width,initial-scale=1,user-scalable=no'/><title>{v}</title>";
-const char HTTP_SCRIPT[]           PROGMEM = "<script>function c(l){"
-"document.getElementById('s').value=l.innerText||l.textContent;"
-"p = l.nextElementSibling.classList.contains('l');"
-"alert(p);"
-"document.getElementById('p').disabled = !p;"
-"if(p)document.getElementById('p').focus();}</script>";
+const char HTTP_SCRIPT[]           PROGMEM = "<script>function c(l){ document.getElementById('s').value=l.innerText||l.textContent; p = l.nextElementSibling.classList.contains('l'); document.getElementById('p').disabled = !p; if(p)document.getElementById('p').focus();}</script>";		///CHANGE MULTIDISPLAY
 
 const char HTTP_HEAD_END[]         PROGMEM = "</head><body class='{c}'><div class='wrap'>";
-// example of embedded logo, base64 encoded inline, No styling here
-// const char HTTP_ROOT_MAIN[]        PROGMEM = "<img title=' alt=' src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAADQElEQVRoQ+2YjW0VQQyE7Q6gAkgFkAogFUAqgFQAVACpAKiAUAFQAaECQgWECggVGH1PPrRvn3dv9/YkFOksoUhhfzwz9ngvKrc89JbnLxuA/63gpsCmwCADWwkNEji8fVNgotDM7osI/x777x5l9F6JyB8R4eeVql4P0y8yNsjM7KGIPBORp558T04A+CwiH1UVUItiUQmZ2XMReSEiAFgjAPBeVS96D+sCYGaUx4cFbLfmhSpnqnrZuqEJgJnd8cQplVLciAgX//Cf0ToIeOB9wpmloLQAwpnVmAXgdf6pwjpJIz+XNoeZQQZlODV9vhc1Tuf6owrAk/8qIhFbJH7eI3eEzsvydQEICqBEkZwiALfF70HyHPpqScPV5HFjeFu476SkRA0AzOfy4hYwstj2ZkDgaphE7m6XqnoS7Q0BOPs/sw0kDROzjdXcCMFCNwzIy0EcRcOvBACfh4k0wgOmBX4xjfmk4DKTS31hgNWIKBCI8gdzogTgjYjQWFMw+o9LzJoZ63GUmjWm2wGDc7EvDDOj/1IVMIyD9SUAL0WEhpriRlXv5je5S+U1i2N88zdPuoVkeB+ls4SyxCoP3kVm9jsjpEsBLoOBNC5U9SwpGdakFkviuFP1keblATkTENTYcxkzgxTKOI3jyDxqLkQT87pMA++H3XvJBYtsNbBN6vuXq5S737WqHkW1VgMQNXJ0RshMqbbT33sJ5kpHWymzcJjNTeJIymJZtSQd9NHQHS1vodoFoTMkfbJzpRnLzB2vi6BZAJxWaCr+62BC+jzAxVJb3dmmiLzLwZhZNPE5e880Suo2AZgB8e8idxherqUPnT3brBDTlPxO3Z66rVwIwySXugdNd+5ejhqp/+NmgIwGX3Py3QBmlEi54KlwmjkOytQ+iJrLJj23S4GkOeecg8G091no737qvRRdzE+HLALQoMTBbJgBsCj5RSWUlUVJiZ4SOljb05eLFWgoJ5oY6yTyJp62D39jDANoKKcSocPJD5dQYzlFAFZJflUArgTPZKZwLXAnHmerfJquUkKZEgyzqOb5TuDt1P3nwxobqwPocZA11m4A1mBx5IxNgRH21ti7KbAGiyNn3HoF/gJ0w05A8xclpwAAAABJRU5ErkJggg==' /><h1>{v}</h1><h3>WiFiManager</h3>";
-const char HTTP_ROOT_MAIN[]        PROGMEM = "<h1>{v}</h1><h3>WiFiManager</h3>";
+
+const char HTTP_ROOT_MAIN[]        PROGMEM = "<h1>Tobers Multidisplay</h1><h2><b>AP:  </b>{v}</h2>";			/// CHANGE MULTIDISPLAY
 const char * const HTTP_PORTAL_MENU[] PROGMEM = {
 "<form action='/wifi'    method='get'><button>Configure WiFi</button></form><br/>\n", // MENU_WIFI
 "<form action='/0wifi'   method='get'><button>Configure WiFi (No Scan)</button></form><br/>\n", // MENU_WIFINOSCAN
@@ -35,7 +29,7 @@ const char * const HTTP_PORTAL_MENU[] PROGMEM = {
 "<form action='/param'   method='get'><button>Setup</button></form><br/>\n",//MENU_PARAM
 "<form action='/close'   method='get'><button>Close</button></form><br/>\n", // MENU_CLOSE
 "<form action='/restart' method='get'><button>Restart</button></form><br/>\n",// MENU_RESTART
-"<form action='/exit'    method='get'><button>Exit</button></form><br/>\n",  // MENU_EXIT
+"<form action='/exit'    method='get'><button>Skip & Exit</button></form><br/>\n",  // MENU_EXIT       ///CHANGE MULTIDISPLAY
 "<form action='/erase'   method='get'><button class='D'>Erase</button></form><br/>\n", // MENU_ERASE
 "<hr><br/>" // MENU_SEP
 };
@@ -70,34 +64,44 @@ const char HTTP_STATUS_OFFFAIL[]   PROGMEM = "<br/>Could not Connect"; // WL_CON
 const char HTTP_STATUS_NONE[]      PROGMEM = "<div class='msg'>No AP set</div>";
 const char HTTP_BR[]               PROGMEM = "<br/>";
 
-const char HTTP_STYLE[]            PROGMEM = "<style>"
-".c,body{text-align:center;font-family:verdana}div,input{padding:5px;font-size:1em;margin:5px 0;box-sizing:border-box;}"
-"input,button,.msg{border-radius:.3rem;width: 100%}"
-"button,input[type='button'],input[type='submit']{cursor:pointer;border:0;background-color:#1fa3ec;color:#fff;line-height:2.4rem;font-size:1.2rem;width:100%}"
-"input[type='file']{border:1px solid #1fa3ec}"
-".wrap {text-align:left;display:inline-block;min-width:260px;max-width:500px}"
-// links
-"a{color:#000;font-weight:700;text-decoration:none}a:hover{color:#1fa3ec;text-decoration:underline}"
-// quality icons
-".q{height:16px;margin:0;padding:0 5px;text-align:right;min-width:38px;float:right}.q.q-0:after{background-position-x:0}.q.q-1:after{background-position-x:-16px}.q.q-2:after{background-position-x:-32px}.q.q-3:after{background-position-x:-48px}.q.q-4:after{background-position-x:-64px}.q.l:before{background-position-x:-80px;padding-right:5px}.ql .q{float:left}.q:after,.q:before{content:'';width:16px;height:16px;display:inline-block;background-repeat:no-repeat;background-position: 16px 0;"
-"background-image:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAAAQCAMAAADeZIrLAAAAJFBMVEX///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADHJj5lAAAAC3RSTlMAIjN3iJmqu8zd7vF8pzcAAABsSURBVHja7Y1BCsAwCASNSVo3/v+/BUEiXnIoXkoX5jAQMxTHzK9cVSnvDxwD8bFx8PhZ9q8FmghXBhqA1faxk92PsxvRc2CCCFdhQCbRkLoAQ3q/wWUBqG35ZxtVzW4Ed6LngPyBU2CobdIDQ5oPWI5nCUwAAAAASUVORK5CYII=');}"
-// icons @2x media query (32px rescaled)
-"@media (-webkit-min-device-pixel-ratio: 2),(min-resolution: 192dpi){.q:before,.q:after {"
-"background-image:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALwAAAAgCAMAAACfM+KhAAAALVBMVEX///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAOrOgAAAADnRSTlMAESIzRGZ3iJmqu8zd7gKjCLQAAACmSURBVHgB7dDBCoMwEEXRmKlVY3L//3NLhyzqIqSUggy8uxnhCR5Mo8xLt+14aZ7wwgsvvPA/ofv9+44334UXXngvb6XsFhO/VoC2RsSv9J7x8BnYLW+AjT56ud/uePMdb7IP8Bsc/e7h8Cfk912ghsNXWPpDC4hvN+D1560A1QPORyh84VKLjjdvfPFm++i9EWq0348XXnjhhT+4dIbCW+WjZim9AKk4UZMnnCEuAAAAAElFTkSuQmCC');"
-"background-size: 95px 16px;}}"
-// msg callouts
-".msg{padding:20px;margin:20px 0;border:1px solid #eee;border-left-width:5px;border-left-color:#777}.msg h4{margin-top:0;margin-bottom:5px}.msg.P{border-left-color:#1fa3ec}.msg.P h4{color:#1fa3ec}.msg.D{border-left-color:#dc3630}.msg.D h4{color:#dc3630}"
-// lists
-"dt{font-weight:bold}dd{margin:0;padding:0 0 0.5em 0;min-height:12px}"
-"td{vertical-align: top;}"
-".h{display:none}"
-"button.D{background-color:#dc3630}"
-// invert
-"body.invert,body.invert a,body.invert h1 {background-color:#060606;color:#fff;}"
-"body.invert .msg{color:#fff;background-color:#282828;border-top:1px solid #555;border-right:1px solid #555;border-bottom:1px solid #555;}"
-"body.invert .q[role=img]{-webkit-filter:invert(1);filter:invert(1);}"
-"input:disabled {opacity: 0.5;}"
-"</style>";
+/// CHANGE MULTIDISPLAY: ADDITIONAL VARIABLES
+
+const char HTTP_MULTIDISPLAY[]	   PROGMEM = "<h1>Tobers Multidisplay</h1>";
+const char HTTP_BACKLINK[]	       PROGMEM = "<div style=\"padding:2em 1em 1em 1em; text-align:center; font-size:90%;\"><a href=\"/\">Back</a></div>";
+const char HTTP_WIFI_SELECT[]	   PROGMEM = "<h3>Select your WiFi</h3>";
+const char HTTP_INFOLINK[]	       PROGMEM = "<div style=\"padding:1em 1em 1em 1em; text-align:center; font-size:90%;\"><a href=\"info\">Show device info</a></div>";
+const char HTTP_DEVICE_INFO[]	   PROGMEM = "<p style=\"text-align:center; font-weight:normal; margin:0; padding:0; margin-top:0.8em; margin-bottom:1em; color:white; font-size:115%;\">Device Info: ";
+const char HTTP_CLOSING[]		   PROGMEM = "<h3>...closing config portal...</h3>";
+const char HTTP_CLOSING_FWD_1[]	   PROGMEM = "<div style=\"margin-top:2em; margin-bottom:2em; text-align:center; line-height:1.5;\">Setting up Multidisplay in AP-Mode<br>with IP <a href=\"http://";
+const char HTTP_CLOSING_FWD_2[]	   PROGMEM = "\" style=\"text-decoration:none;\">";
+const char HTTP_CLOSING_FWD_3[]	   PROGMEM = "</a></div>";
+
+/// CHANGE MULTIDISPLAY: ADDITIONAL VARIABLES ////
+const char HTTP_STYLE[]            PROGMEM = R"(
+<style>
+body {text-align:center; margin:0; padding:0; background-color:#f6b54d; font-size:1em; font-family:sans-serif;}
+.wrap {margin:1em; text-align:left; display:inline-block; padding:1em; border-radius:1em;}
+h1 {text-align:center; font-size:180%; margin:0; padding:0; margin-bottom:0.5em; color:#af601a;}
+h2 {text-align:center; font-weight:normal; margin:0; padding:0; margin-top:0.8em; margin-bottom:2em; color:white; font-size:115%; }
+h3 {text-align:center; font-weight:normal; margin:0; padding:0; margin-top:0.8em; margin-bottom:1em; color:white; font-size:115%; }
+h4 {text-align:center; font-weight:bold; margin:0; padding:0; margin-top:0.8em; margin-bottom:1em; color:#af601a; font-size:115%; }
+div {margin-top: 0.3em; margin-bottom: 0.0em; background-color:#f39c12; border-radius:1em; border-style: solid; border-width:0px; border-color:red; color:white; text-align:center; padding:1em 2em 1em 1em;}
+form {width:80%; margin:0; padding:0; margin-left:10%; margin-top:0.5em;}
+.c{text-align: center;}
+input {width:92%; margin:0; padding:0.2em; border:0.1em solid #e1c3a9; border-radius:0.4em; border-style: solid; font-size:100%; background-color:white; margin-top:0.1em; margin-bottom:0.8em; color: #af601a;}
+button {width:100%; margin:0; padding:0; border:0.1em solid #e1c3a9; border-radius:0.4em; border-style: solid; font-size:100%; background-color: #af601a ; padding-top:0.4em; padding-bottom:0.4em; padding-left:0.6em; padding-right:0.6em; color:white;}
+button:hover {background-color:white; color:#af601a;}
+button:active {background-color: white; transform: translateY(2px);}
+a {color:white;}
+a:hover {color:#af601a;}
+a:active { color:#af601a;}
+.q{height:16px;margin:0;padding:0 5px;text-align:right;min-width:38px;float:right}.q.q-0:after{background-position-x:0}.q.q-1:after{background-position-x:-16px}.q.q-2:after{background-position-x:-32px}.q.q-3:after{background-position-x:-48px}.q.q-4:after{background-position-x:-64px}.q.l:before{background-position-x:-80px;padding-right:5px}.ql .q{float:left}.q:after,.q:before{content:'';width:16px;height:16px;display:inline-block;background-repeat:no-repeat;background-position: 16px 0; background-image:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAAAQCAMAAADeZIrLAAAAJFBMVEX///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADHJj5lAAAAC3RSTlMAIjN3iJmqu8zd7vF8pzcAAABsSURBVHja7Y1BCsAwCASNSVo3/v+/BUEiXnIoXkoX5jAQMxTHzK9cVSnvDxwD8bFx8PhZ9q8FmghXBhqA1faxk92PsxvRc2CCCFdhQCbRkLoAQ3q/wWUBqG35ZxtVzW4Ed6LngPyBU2CobdIDQ5oPWI5nCUwAAAAASUVORK5CYII='); filter: invert(100%);}
+.msg{width:70%; margin:0; padding:0; margin-top:2em; margin-bottom:0.5em;  border:0.1em solid #e1c3a9; border-radius:0.4em; border-style: solid; font-size:90%; padding-top:0.4em; padding-bottom:0.4em; padding-left:0.6em; padding-right:0.6em; margin-left:10%; color:white;border-left-width:0.6em;}.msg h4{margin-top:0;margin-bottom:0.1em}.msg.P{border-left-color:#1fa3ec}.msg.P h4{color:#1fa3ec}.msg.D{border-left-color:#dc3630}.msg.D h4{color:#dc3630}
+hr {border: 1px dotted #af601a;}
+dl {margin-left:10%;}
+dd {color:#af601a;}
+</style>
+)";
 
 const char HTTP_HELP[]             PROGMEM =
  "<br/><h3>Available Pages</h3><hr>"
@@ -146,12 +150,12 @@ const char HTTP_JS[] PROGMEM =
 
 // Info html
 #ifdef ESP32
-	const char HTTP_INFO_esphead[]    PROGMEM = "<h3>esp32</h3><hr><dl>";
+	const char HTTP_INFO_esphead[]    PROGMEM = "<span style=\"color:#af601a; font-weight:bold;\">Esp32</span></p><hr><dl>";						///CHANGE MULTIDISPLAY
 	const char HTTP_INFO_chiprev[]    PROGMEM = "<dt>Chip Rev</dt><dd>{1}</dd>";
   const char HTTP_INFO_lastreset[]    PROGMEM = "<dt>Last reset reason</dt><dd>CPU0: {1}<br/>CPU1: {2}</dd>";
   const char HTTP_INFO_aphost[]       PROGMEM = "<dt>Acccess Point Hostname</dt><dd>{1}</dd>";  
 #else 
-	const char HTTP_INFO_esphead[]    PROGMEM = "<h3>esp8266</h3><hr><dl>";
+	const char HTTP_INFO_esphead[]    PROGMEM = "<span style=\"color:#af601a; font-weight:bold;\">Esp8266</span></p><hr><dl>";					///CHANGE MULTIDISPLAY
 	const char HTTP_INFO_flashsize[]  PROGMEM = "<dt>Real Flash Size</dt><dd>{1} bytes</dd>";
 	const char HTTP_INFO_fchipid[]    PROGMEM = "<dt>Flash Chip ID</dt><dd>{1}</dd>";
 	const char HTTP_INFO_corever[]    PROGMEM = "<dt>Core Version</dt><dd>{1}</dd>";
@@ -190,7 +194,7 @@ const char S_disable[]            PROGMEM = "Disabled";
 const char S_GET[]                PROGMEM = "GET";
 const char S_POST[]               PROGMEM = "POST";
 const char S_NA[]                 PROGMEM = "Unknown";
-const char S_passph[]             PROGMEM = "********";
+const char S_passph[]             PROGMEM = "";											/// CHANGE
 const char S_titlewifisaved[]     PROGMEM = "Credentials Saved";
 const char S_titlewifisettings[]  PROGMEM = "Settings Saved";
 const char S_titlewifi[]          PROGMEM = "Config ESP";
