@@ -1,5 +1,22 @@
+# NOT YET FINISHED !!!
+# WiFiManager for Multidisplay
+This is custom fork of the development branch of tzapu's [WiFiManager](https://github.com/tzapu/WiFiManager/tree/development) especially created for [Tobers Multidisplay](https://github.com/tzapu/WiFiManager). It works with ESP8266 and ESP32.
 
-# WiFiManager
+The changes I made are mainly visual ones: some new/other css rules and some changes in shown menu items.
+
+Successfully compiled with Arduino 1.8.12, ESP8266 core for Arduino 2.6.3 / Arduino core for the ESP32 1.0.4
+
+# Installing
+
+
+
+
+
+
+
+
+
+
 ESP8266 WiFi Connection manager with fallback web configuration portal
 
 [![Build Status](https://travis-ci.org/tzapu/WiFiManager.svg?branch=development)](https://travis-ci.org/tzapu/WiFiManager)
