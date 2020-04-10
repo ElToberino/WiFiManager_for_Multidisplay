@@ -15,13 +15,8 @@ The changes I made are mainly visual ones: some new/other css rules and some cha
 
 Just click on "Clone or Download" -> "Download ZIP" to downlaod the library.
 Unpack the library into your Arduino libraries folder.
-
-<p align="center">
-    <img src="pics/howto.jpg" width="700">
 <br>
 <br>
-</p>
-
 Successfully compiled with Arduino 1.8.12, ESP8266 core for Arduino 2.6.3 / Arduino core for the ESP32 1.0.4.<br>
 For further information visit the original project [WiFiManager](https://github.com/tzapu/WiFiManager/tree/development) .
 <br>
