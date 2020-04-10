@@ -1,6 +1,6 @@
 # NOT YET FINISHED !!!
 # WiFiManager for Multidisplay
-This is a custom fork of the development branch of tzapu's [WiFiManager](https://github.com/tzapu/WiFiManager/tree/development) especially created for [Tobers Multidisplay](https://github.com/tzapu/WiFiManager). It works with ESP8266 and ESP32.
+This is a custom fork of the development branch of tzapu's [WiFiManager](https://github.com/tzapu/WiFiManager/tree/development) especially created for [Tobers Multidisplay](https://github.com/ElToberino/Tobers_Multidisplay). It works with ESP8266 and ESP32.
 
 The changes I made are mainly visual ones: some new/other css rules and some changes in shown menu items:
 
