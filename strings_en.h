@@ -1,13 +1,17 @@
 /**
  * strings_en.h
  * engligh strings for
+ * WifiManager_for_Multidisplay, forked by ElToberino of
  * WiFiManager, a library for the ESP8266/Arduino platform
  * for configuration of WiFi credentials using a Captive Portal
  * 
+ * all changes of this fork are marked with   ///CHANGE MULTIDISPLAY
+ *
  * @author Creator tzapu
  * @author tablatronix
  * @version 0.0.0
  * @license MIT
+ * 
  */
 
 #ifndef _WM_STRINGS_H_
@@ -17,11 +21,15 @@
 // !!! THIS DOES NOT WORK, you cannot define in a sketch, if anyone one knows how to order includes to be able to do this help!
 
 const char HTTP_HEAD_START[]       PROGMEM = "<!DOCTYPE html><html lang='en'><head><meta name='format-detection' content='telephone=no'><meta charset='UTF-8'><meta  name='viewport' content='width=device-width,initial-scale=1,user-scalable=no'/><title>{v}</title>";
-const char HTTP_SCRIPT[]           PROGMEM = "<script>function c(l){ document.getElementById('s').value=l.innerText||l.textContent; p = l.nextElementSibling.classList.contains('l'); document.getElementById('p').disabled = !p; if(p)document.getElementById('p').focus();}</script>";		///CHANGE MULTIDISPLAY
+
+///CHANGE MULTIDISPLAY -> Javascript file is loaded from SPIFFS
+//const char HTTP_SCRIPT[]           PROGMEM = "<script>function c(l){ document.getElementById('s').value=l.innerText||l.textContent; p = l.nextElementSibling.classList.contains('l'); document.getElementById('p').disabled = !p; if(p)document.getElementById('p').focus();}</script>";
+
+const char HTTP_LINK_REL[]		   PROGMEM = "<link rel='stylesheet' href='/css'/><script type='text/javascript' src='/js'></script>";   					///CHANGE MULTIDISPLAY -> new html element calls function to load css and js from SPIFFS
 
 const char HTTP_HEAD_END[]         PROGMEM = "</head><body class='{c}'><div class='wrap'>";
 
-const char HTTP_ROOT_MAIN[]        PROGMEM = "<h1>Tobers Multidisplay</h1><h2><b>AP:  </b>{v}</h2>";			/// CHANGE MULTIDISPLAY
+const char HTTP_ROOT_MAIN[]        PROGMEM = "<h1>Tobers Multidisplay</h1><h2><b>AP:  </b>{v}</h2>";														///CHANGE MULTIDISPLAY -> new content
 const char * const HTTP_PORTAL_MENU[] PROGMEM = {
 "<form action='/wifi'    method='get'><button>Configure WiFi</button></form><br/>\n", // MENU_WIFI
 "<form action='/0wifi'   method='get'><button>Configure WiFi (No Scan)</button></form><br/>\n", // MENU_WIFINOSCAN
@@ -45,14 +53,17 @@ const char HTTP_FORM_START[]       PROGMEM = "<form method='POST' action='{v}'>"
 const char HTTP_FORM_WIFI[]        PROGMEM = "<label for='s'>SSID</label><input id='s' name='s' maxlength='32' autocorrect='off' autocapitalize='none' placeholder='{v}'><br/><label for='p'>Password</label><input id='p' name='p' maxlength='64' type='password' placeholder='{p}'>";
 const char HTTP_FORM_WIFI_END[]    PROGMEM = "";
 const char HTTP_FORM_STATIC_HEAD[] PROGMEM = "<hr><br/>";
-const char HTTP_FORM_END[]         PROGMEM = "<br/><br/><button type='submit'>Save</button></form>";
-const char HTTP_FORM_LABEL[]       PROGMEM = "<label for='{i}'>{t}</label>";
+const char HTTP_FORM_STATIC_END[]  PROGMEM = "<hr>";
+const char HTTP_FORM_END[]         PROGMEM = "<button type='submit'>Save</button></form>";
+const char HTTP_RADIO_ADV[]        PROGMEM = "<hr><span class='labelAdv'>Advanced Settings<br><br></span><label for='dhcp' class='staticRadioLabel'>DHCP</label><input type='radio' id='dhcp' class='staticRadioInput'  onclick='staticCheck();' checked='checked' autocomplete='off' name='toggle'><label for='static' class='staticRadioLabel'>Static IP</label><input type='radio' id='static' class='staticRadioInput' onclick='staticCheck();'  autocomplete='off' name='toggle'>";			///CHANGE MULTIDISPLAY
+const char HTTP_FORM_LABEL[]       PROGMEM = "<label for='{i}' id='{lb}' class='staticlabel'>{t}</label>";													///CHANGE MULTIDISPLAY -> added id and class for label
 const char HTTP_FORM_PARAM_HEAD[]  PROGMEM = "<hr><br/>";
-const char HTTP_FORM_PARAM[]       PROGMEM = "<br/><input id='{i}' name='{n}' maxlength='{l}' value='{v}' {c}>";
+const char HTTP_FORM_PARAM[]       PROGMEM = "<input id='{i}' name='{n}' class='none' maxlength='{l}' value='{v}' {c}>"; 									///CHANGE MULTIDISPLAY -> added class for label
 
 const char HTTP_SCAN_LINK[]        PROGMEM = "<br/><form action='/wifi?refresh=1' method='POST'><button name='refresh' value='1'>Refresh</button></form>";
-const char HTTP_SAVED[]            PROGMEM = "<div class='msg'>Saving Credentials<br/>Trying to connect ESP to network.<br />If it fails reconnect to AP to try again</div>";
-const char HTTP_PARAMSAVED[]       PROGMEM = "<div class='msg'>Saved<br/></div>";
+const char HTTP_SAVING_CRED[]	   PROGMEM = "<h3>...saving WiFi credentials...</h3>";   																	///CHANGE MULTIDISPLAY -> new html element
+const char HTTP_SAVED[]            PROGMEM = "<div class='closing'>Trying to connect ESP to network.<br />If it fails reconnect to AP to try again</div>"; 	///CHANGE MULTIDISPLAY -> added class for label
+const char HTTP_PARAMSAVED[]       PROGMEM = "<div class='closing'>Saved<br/></div>"; 																		///CHANGE MULTIDISPLAY -> added class for label
 const char HTTP_END[]              PROGMEM = "</div></body></html>";
 const char HTTP_ERASEBTN[]         PROGMEM = "<br/><form action='/erase' method='get'><button class='D'>Erase WiFi Config</button></form>";
 
@@ -67,41 +78,25 @@ const char HTTP_BR[]               PROGMEM = "<br/>";
 /// CHANGE MULTIDISPLAY: ADDITIONAL VARIABLES
 
 const char HTTP_MULTIDISPLAY[]	   PROGMEM = "<h1>Tobers Multidisplay</h1>";
-const char HTTP_BACKLINK[]	       PROGMEM = "<div style=\"padding:2em 1em 1em 1em; text-align:center; font-size:90%;\"><a href=\"/\">Back</a></div>";
+const char HTTP_BACKLINK[]	       PROGMEM = "<div class='backlink'><a href='/'>Back</a></div>";
 const char HTTP_WIFI_SELECT[]	   PROGMEM = "<h3>Select your WiFi</h3>";
-const char HTTP_INFOLINK[]	       PROGMEM = "<div style=\"padding:1em 1em 1em 1em; text-align:center; font-size:90%;\"><a href=\"info\">Show device info</a></div>";
-const char HTTP_DEVICE_INFO[]	   PROGMEM = "<p style=\"text-align:center; font-weight:normal; margin:0; padding:0; margin-top:0.8em; margin-bottom:1em; color:white; font-size:115%;\">Device Info: ";
+const char HTTP_INFOLINK[]	       PROGMEM = "<div class='info'><a href=\"info\">Show device info</a></div>";
+const char HTTP_DEVICE_INFO[]	   PROGMEM = "<p class='deviceinfo'>Device Info: ";
 const char HTTP_CLOSING[]		   PROGMEM = "<h3>...closing config portal...</h3>";
-const char HTTP_CLOSING_FWD_1[]	   PROGMEM = "<div style=\"margin-top:2em; margin-bottom:2em; text-align:center; line-height:1.5;\">Setting up Multidisplay in AP-Mode<br>with IP <a href=\"http://";
+const char HTTP_CLOSING_FWD_1[]	   PROGMEM = "<div class='closing'>Setting up Multidisplay in AP-Mode<br>with IP <a href=\"http://";
 const char HTTP_CLOSING_FWD_2[]	   PROGMEM = "\" style=\"text-decoration:none;\">";
 const char HTTP_CLOSING_FWD_3[]	   PROGMEM = "</a></div>";
 
-/// CHANGE MULTIDISPLAY: ADDITIONAL VARIABLES ////
-const char HTTP_STYLE[]            PROGMEM = R"(
-<style>
-body {text-align:center; margin:0; padding:0; background-color:#f6b54d; font-size:1em; font-family:sans-serif;}
-.wrap {margin:1em; text-align:left; display:inline-block; padding:1em; border-radius:1em;}
-h1 {text-align:center; font-size:180%; margin:0; padding:0; margin-bottom:0.5em; color:#af601a;}
-h2 {text-align:center; font-weight:normal; margin:0; padding:0; margin-top:0.8em; margin-bottom:2em; color:white; font-size:115%; }
-h3 {text-align:center; font-weight:normal; margin:0; padding:0; margin-top:0.8em; margin-bottom:1em; color:white; font-size:115%; }
-h4 {text-align:center; font-weight:bold; margin:0; padding:0; margin-top:0.8em; margin-bottom:1em; color:#af601a; font-size:115%; }
-div {margin-top: 0.3em; margin-bottom: 0.0em; background-color:#f39c12; border-radius:1em; border-style: solid; border-width:0px; border-color:red; color:white; text-align:center; padding:1em 2em 1em 1em;}
-form {width:80%; margin:0; padding:0; margin-left:10%; margin-top:0.5em;}
-.c{text-align: center;}
-input {width:92%; margin:0; padding:0.2em; border:0.1em solid #e1c3a9; border-radius:0.4em; border-style: solid; font-size:100%; background-color:white; margin-top:0.1em; margin-bottom:0.8em; color: #af601a;}
-button {width:100%; margin:0; padding:0; border:0.1em solid #e1c3a9; border-radius:0.4em; border-style: solid; font-size:100%; background-color: #af601a ; padding-top:0.4em; padding-bottom:0.4em; padding-left:0.6em; padding-right:0.6em; color:white;}
-button:hover {background-color:white; color:#af601a;}
-button:active {background-color: white; transform: translateY(2px);}
-a {color:white;}
-a:hover {color:#af601a;}
-a:active { color:#af601a;}
-.q{height:16px;margin:0;padding:0 5px;text-align:right;min-width:38px;float:right}.q.q-0:after{background-position-x:0}.q.q-1:after{background-position-x:-16px}.q.q-2:after{background-position-x:-32px}.q.q-3:after{background-position-x:-48px}.q.q-4:after{background-position-x:-64px}.q.l:before{background-position-x:-80px;padding-right:5px}.ql .q{float:left}.q:after,.q:before{content:'';width:16px;height:16px;display:inline-block;background-repeat:no-repeat;background-position: 16px 0; background-image:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAAAQCAMAAADeZIrLAAAAJFBMVEX///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADHJj5lAAAAC3RSTlMAIjN3iJmqu8zd7vF8pzcAAABsSURBVHja7Y1BCsAwCASNSVo3/v+/BUEiXnIoXkoX5jAQMxTHzK9cVSnvDxwD8bFx8PhZ9q8FmghXBhqA1faxk92PsxvRc2CCCFdhQCbRkLoAQ3q/wWUBqG35ZxtVzW4Ed6LngPyBU2CobdIDQ5oPWI5nCUwAAAAASUVORK5CYII='); filter: invert(100%);}
-.msg{width:70%; margin:0; padding:0; margin-top:2em; margin-bottom:0.5em;  border:0.1em solid #e1c3a9; border-radius:0.4em; border-style: solid; font-size:90%; padding-top:0.4em; padding-bottom:0.4em; padding-left:0.6em; padding-right:0.6em; margin-left:10%; color:white;border-left-width:0.6em;}.msg h4{margin-top:0;margin-bottom:0.1em}.msg.P{border-left-color:#1fa3ec}.msg.P h4{color:#1fa3ec}.msg.D{border-left-color:#dc3630}.msg.D h4{color:#dc3630}
-hr {border: 1px dotted #af601a;}
-dl {margin-left:10%;}
-dd {color:#af601a;}
-</style>
-)";
+const char HTTP_STYLE_LIGHT[]      PROGMEM = "<style>"																										/// CHANGE MULTDISPLAY: -> new html element: less CSS for exit and saving site
+"body {text-align:center; margin:0; padding:0; background-color:#f6b54d; font-size:1em; font-family:sans-serif; color:white;} " 
+"h1 {text-align:center; font-size:180%; margin:0; padding:0; margin-bottom:0.5em; color:#af601a;} " 
+"h3 {text-align:center; font-weight:normal; margin:0; padding:0; margin-top:0.8em; margin-bottom:1em; color:white; font-size:115%;} " 
+".wrap {margin:1em; background-color:#f39c12; text-align:left; display:inline-block; padding:1em; border-radius:1em;} "
+"a {color:white;} a:hover {color:#af601a;} a:active {color:#af601a;} "
+".closing {margin-top:2em; margin-bottom:2em; text-align:center; line-height:1.5;} "
+"</style>";
+
+//const char HTTP_STYLE[]            PROGMEM = "<style></style>";				/// CHANGE MULTIDISPLAY -> large(!) embedded CSS abandoned for CSS loading from SPIFFS
 
 const char HTTP_HELP[]             PROGMEM =
  "<br/><h3>Available Pages</h3><hr>"
@@ -150,12 +145,12 @@ const char HTTP_JS[] PROGMEM =
 
 // Info html
 #ifdef ESP32
-	const char HTTP_INFO_esphead[]    PROGMEM = "<span style=\"color:#af601a; font-weight:bold;\">Esp32</span></p><hr><dl>";						///CHANGE MULTIDISPLAY
+	const char HTTP_INFO_esphead[]    PROGMEM = "<span style='color:#af601a;'>Esp32</span></p><hr><dl>";			///CHANGE MULTIDISPLAY -> added <span>
 	const char HTTP_INFO_chiprev[]    PROGMEM = "<dt>Chip Rev</dt><dd>{1}</dd>";
   const char HTTP_INFO_lastreset[]    PROGMEM = "<dt>Last reset reason</dt><dd>CPU0: {1}<br/>CPU1: {2}</dd>";
   const char HTTP_INFO_aphost[]       PROGMEM = "<dt>Acccess Point Hostname</dt><dd>{1}</dd>";  
 #else 
-	const char HTTP_INFO_esphead[]    PROGMEM = "<span style=\"color:#af601a; font-weight:bold;\">Esp8266</span></p><hr><dl>";					///CHANGE MULTIDISPLAY
+	const char HTTP_INFO_esphead[]    PROGMEM = "<span style='color:#af601a;'>Esp8266</span></p><hr><dl>";		  	///CHANGE MULTIDISPLAY -> added <span>
 	const char HTTP_INFO_flashsize[]  PROGMEM = "<dt>Real Flash Size</dt><dd>{1} bytes</dd>";
 	const char HTTP_INFO_fchipid[]    PROGMEM = "<dt>Flash Chip ID</dt><dd>{1}</dd>";
 	const char HTTP_INFO_corever[]    PROGMEM = "<dt>Core Version</dt><dd>{1}</dd>";
@@ -165,9 +160,9 @@ const char HTTP_JS[] PROGMEM =
 	const char HTTP_INFO_lastreset[]  PROGMEM = "<dt>Last reset reason</dt><dd>{1}</dd>";
 #endif
 
-const char HTTP_INFO_freeheap[]   PROGMEM = "<dt>Memory - Free Heap</dt><dd>{1} bytes available</dd>"; 
-const char HTTP_INFO_wifihead[]   PROGMEM = "<br/><h3>WiFi</h3><hr>";
-const char HTTP_INFO_uptime[]     PROGMEM = "<dt>Uptime</dt><dd>{1} Mins {2} Secs</dd>";
+const char HTTP_INFO_freeheap[]   PROGMEM = "<dt>Memory - Free Heap</dt><dd>{1} bytes available</dd></dl>"; 							///CHANGE MULTIDISPLAY -> added </dl>
+const char HTTP_INFO_wifihead[]   PROGMEM = "<br/><h3 style='margin-bottom:0em;'>WiFi</h3><hr><dl>";									///CHANGE MULTIDISPLAY -> added style & added <dl>
+const char HTTP_INFO_uptime[]     PROGMEM = "<dt>Uptime</dt><dd>{1} Mins {2} Secs</dd>";											
 const char HTTP_INFO_chipid[]     PROGMEM = "<dt>Chip ID</dt><dd>{1}</dd>";
 const char HTTP_INFO_idesize[]    PROGMEM = "<dt>Flash Size</dt><dd>{1} bytes</dd>";
 const char HTTP_INFO_sdkver[]     PROGMEM = "<dt>SDK Version</dt><dd>{1}</dd>";
@@ -194,7 +189,7 @@ const char S_disable[]            PROGMEM = "Disabled";
 const char S_GET[]                PROGMEM = "GET";
 const char S_POST[]               PROGMEM = "POST";
 const char S_NA[]                 PROGMEM = "Unknown";
-const char S_passph[]             PROGMEM = "";											/// CHANGE
+const char S_passph[]             PROGMEM = "";																							///CHANGE MULTIDISPLAY -> no placeholders for password field
 const char S_titlewifisaved[]     PROGMEM = "Credentials Saved";
 const char S_titlewifisettings[]  PROGMEM = "Settings Saved";
 const char S_titlewifi[]          PROGMEM = "Config ESP";
@@ -291,7 +286,7 @@ const char T_q[]                  PROGMEM = "{q}"; // @token q
 const char T_r[]                  PROGMEM = "{r}"; // @token r
 const char T_R[]                  PROGMEM = "{R}"; // @token R
 const char T_h[]                  PROGMEM = "{h}"; // @token h
-
+const char Label_ID[]             PROGMEM = "{lb}"; // @token lb																		///CHANGE MULTIDISPLAY -> new token for label id
 // http
 const char HTTP_HEAD_CL[]         PROGMEM = "Content-Length";
 const char HTTP_HEAD_CT[]         PROGMEM = "text/html";

@@ -1,9 +1,12 @@
 /**
  * WiFiManager.h
  * 
+ * WifiManager_for_Multidisplay, forked by ElToberino of
  * WiFiManager, a library for the ESP8266/Arduino platform
  * for configuration of WiFi credentials using a Captive Portal
  * 
+ * all changes of this fork are marked with  ///CHANGE MULTIDISPLAY
+ *
  * @author Creator tzapu
  * @author tablatronix
  * @version 0.0.0
@@ -19,7 +22,7 @@
 #ifdef ESP8266
 #include <core_version.h>
 #endif
-
+//#include <FS.h>					///CHANGE MULTIDISPLAY ?
 #include <vector>
 
 // #define WM_MDNS            // also set MDNS with sethostname
@@ -58,6 +61,8 @@
 
     #include <WiFi.h>
     #include <esp_wifi.h>  
+	
+	#include <SPIFFS.h>					// CHANGE MULTIDISPLAY -> required for loading css and javascript from SPIFFS
     
     #define WIFI_getChipId() (uint32_t)ESP.getEfuseMac()
     #define WM_WIFIOPEN   WIFI_AUTH_OPEN
@@ -185,7 +190,11 @@ class WiFiManager
     WiFiManagerParameter** getParameters();
     // returns the Parameters Count
     int           getParametersCount();
-
+	
+	//shows if STA MODE with static IP Mode								///CHANGE MULTIDISPLAY
+	bool		  getStaticMode();										///CHANGE MULTIDISPLAY					
+	//file definition for SPIFFS										///CHANGE MULTIDISPLAY
+	File          f;													///CHANGE MULTIDISPLAY
 
     // SET CALLBACKS
 
@@ -320,6 +329,7 @@ class WiFiManager
     IPAddress     _sta_static_gw;
     IPAddress     _sta_static_sn;
     IPAddress     _sta_static_dns;
+	bool		  _static_config 		  = false;   ///CHANGE MULTIDISPLAY -> flag if static IP was set
 
     // defaults
     const byte    DNS_PORT                = 53;
@@ -360,8 +370,8 @@ class WiFiManager
 
     // parameter options
     int           _minimumQuality         = -1;    // filter wifiscan ap by this rssi
-    int            _staShowStaticFields   = 0;     // ternary 1=always show static ip fields, 0=only if set, -1=never(cannot change ips via web!)
-    int            _staShowDns            = 0;     // ternary 1=always show dns, 0=only if set, -1=never(cannot change dns via web!)
+    int            _staShowStaticFields   = 1;     // ternary 1=always show static ip fields, 0=only if set, -1=never(cannot change ips via web!)  ///CHANGE MULTIDISPLAY -> 1
+    int            _staShowDns            = 1;     // ternary 1=always show dns, 0=only if set, -1=never(cannot change dns via web!)			   ///CHANGE MULTIDISPLAY -> 1
     boolean       _removeDuplicateAPs     = true;  // remove dup aps from wifiscan
     boolean       _showPassword           = false; // show or hide saved password on wifi form, might be a security issue!
     boolean       _shouldBreakAfterConfig = false; // stop configportal on save failure
@@ -373,7 +383,7 @@ class WiFiManager
     boolean       _webClientCheck         = true;  // keep cp alive if web have client
     boolean       _scanDispOptions        = false; // show percentage in scans not icons
     boolean       _paramsInWifi           = true;  // show custom parameters on wifi page
-    boolean       _showInfoErase          = false;  // info page erase button    									////CHANGE MULTIDISPLAY
+    boolean       _showInfoErase          = false;  // info page erase button    									////CHANGE MULTIDISPLAY -> false
     boolean       _enableConfigPortal     = true;  // use config portal if autoconnect failed
     const char *  _hostname               = "";
 
@@ -429,7 +439,8 @@ class WiFiManager
     void          handleRequest();
     void          handleParamSave();
     void          doParamSave();
-
+	void		  loadCSS();				///CHANGE MULTIDISPLAY -> function to load CSS from SPIFFS
+	void		  loadJS();					///CHANGE MULTIDISPLAY -> function to load Javascript from SPIFFS
     boolean       captivePortal();
     boolean       configPortalHasTimeout();
     uint8_t       processConfigPortal();

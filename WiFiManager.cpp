@@ -1,8 +1,11 @@
 /**
  * WiFiManager.cpp
  * 
+ * WifiManager_for_Multidisplay, forked by ElToberino of
  * WiFiManager, a library for the ESP8266/Arduino platform
  * for configuration of WiFi credentials using a Captive Portal
+ *
+ * all changes of this fork are marked with  ///CHANGE MULTIDISPLAY
  * 
  * @author Creator tzapu
  * @author tablatronix
@@ -501,7 +504,9 @@ void WiFiManager::setupConfigPortal() {
   server->on(String(FPSTR(R_close)).c_str(),      std::bind(&WiFiManager::handleClose, this));
   server->on(String(FPSTR(R_erase)).c_str(),      std::bind(&WiFiManager::handleErase, this, false));
   server->on(String(FPSTR(R_status)).c_str(),     std::bind(&WiFiManager::handleWiFiStatus, this));
-  server->onNotFound (std::bind(&WiFiManager::handleNotFound, this));
+  server->onNotFound(							  std::bind(&WiFiManager::handleNotFound, this));
+  server->on("/css",       					  	  std::bind(&WiFiManager::loadCSS, this));			///CHANGE MULTIDISPLAY -> configportalportal html calls "/css"
+  server->on("/js",       					      std::bind(&WiFiManager::loadJS, this));			///CHANGE MULTIDISPLAY -> configportalportal html calls "/js"
   
   server->begin(); // Web server start
   DEBUG_WM(DEBUG_VERBOSE,F("HTTP server started"));
@@ -826,10 +831,12 @@ bool WiFiManager::setSTAConfig(){
     if(_sta_static_dns) {
       DEBUG_WM(DEBUG_VERBOSE,F("Custom static DNS"));
       ret = WiFi.config(_sta_static_ip, _sta_static_gw, _sta_static_sn, _sta_static_dns);
+	  _static_config = true;			///CHANGE MULTIDISPLAY -> set flag static IP enabled
     }
     else {
       DEBUG_WM(DEBUG_VERBOSE,F("Custom STA IP/GW/Subnet"));
       ret = WiFi.config(_sta_static_ip, _sta_static_gw, _sta_static_sn);
+	   _static_config = true;			///CHANGE MULTIDISPLAY -> set flag static IP enabled
     }
 
     if(!ret) DEBUG_WM(DEBUG_ERROR,"[ERROR] wifi config failed");
@@ -839,6 +846,7 @@ bool WiFiManager::setSTAConfig(){
   }
   return ret;
 }
+
 
 // @todo change to getLastFailureReason and do not touch conxresult
 void WiFiManager::updateConxResult(uint8_t status){
@@ -913,8 +921,9 @@ String WiFiManager::getHTTPHead(String title){
   String page;
   page += FPSTR(HTTP_HEAD_START);
   page.replace(FPSTR(T_v), title);
-  page += FPSTR(HTTP_SCRIPT);
-  page += FPSTR(HTTP_STYLE);
+  page += FPSTR(HTTP_LINK_REL);				///CHANGE MULTIDISPLAY -> CSS and Javascript are loaded from SPIFFS
+  //page += FPSTR(HTTP_SCRIPT);				///CHANGE MULTIDISPLAY
+  //page += FPSTR(HTTP_STYLE);				///CHANGE MULTIDISPLAY
   page += _customHeadElement;
 
   if(_bodyClass != ""){
@@ -950,7 +959,7 @@ void WiFiManager::handleRoot() {
   page += FPSTR(HTTP_PORTAL_OPTIONS);
   page += getMenuOut();
   //reportStatus(page);                           ///CHANGE MULTIDISPLAY
-  page += FPSTR(HTTP_INFOLINK);					  ///CHANGE MULTIDISPLAY
+  page += FPSTR(HTTP_INFOLINK);					  ///CHANGE MULTIDISPLAY -> new html element
   page += FPSTR(HTTP_END);
 
   server->sendHeader(FPSTR(HTTP_HEAD_CL), String(page.length()));
@@ -972,8 +981,8 @@ void WiFiManager::handleWifi(boolean scan) {
   if (scan) {
     // DEBUG_WM(DEBUG_DEV,"refresh flag:",server->hasArg(F("refresh")));
     WiFi_scanNetworks(server->hasArg(F("refresh")),false); //wifiscan, force if arg refresh
-    page += FPSTR(HTTP_MULTIDISPLAY);							///CHANGE MULTIDISPLAY	
-	page += FPSTR(HTTP_WIFI_SELECT);                       		///CHANGE MULTIDISPLAY
+    page += FPSTR(HTTP_MULTIDISPLAY);							///CHANGE MULTIDISPLAY -> new html element
+	page += FPSTR(HTTP_WIFI_SELECT);                       		///CHANGE MULTIDISPLAY -> new html element
 	page += getScanItemOut();
   }
   String pitem = "";
@@ -992,23 +1001,25 @@ void WiFiManager::handleWifi(boolean scan) {
     pitem.replace(FPSTR(T_p),FPSTR(S_passph));    
   }
   page += pitem;
+  
+  page += FPSTR(HTTP_RADIO_ADV);		///CHANGE MULTIDISPLAY -> new html element
 
   page += getStaticOut();
   page += FPSTR(HTTP_FORM_WIFI_END);
   if(_paramsInWifi && _paramsCount>0){
-    page += FPSTR(HTTP_FORM_PARAM_HEAD);
+    //page += FPSTR(HTTP_FORM_PARAM_HEAD);
+	page += FPSTR(HTTP_FORM_STATIC_END);
     page += getParamOut();
   }
   page += FPSTR(HTTP_FORM_END);
   page += FPSTR(HTTP_SCAN_LINK);
-  page += FPSTR(HTTP_BACKLINK);			///CHANGE MULTIDISPLAY
+  page += FPSTR(HTTP_BACKLINK);			///CHANGE MULTIDISPLAY -> new html element
   //reportStatus(page);                 ///CHANGE MULTIDISPLAY
   page += FPSTR(HTTP_END);
-
   server->sendHeader(FPSTR(HTTP_HEAD_CL), String(page.length()));
   server->send(200, FPSTR(HTTP_HEAD_CT), page);
+  
   // server->close(); // testing reliability fix for content length mismatches during mutiple flood hits
-
   DEBUG_WM(DEBUG_DEV,F("Sent config page"));
 }
 
@@ -1216,10 +1227,12 @@ String WiFiManager::WiFiManager::getScanItemOut(){
 }
 
 String WiFiManager::getIpForm(String id, String title, String value){
-    String item = FPSTR(HTTP_FORM_LABEL);
+    String idlabel = id + "label";							///CHANGE MULTIDISPLAY -> required for html ids for <label>s of static IP form
+	String item = FPSTR(HTTP_FORM_LABEL);
     item += FPSTR(HTTP_FORM_PARAM);
     item.replace(FPSTR(T_i), id);
     item.replace(FPSTR(T_n), id);
+	item.replace(FPSTR(Label_ID), idlabel);					///CHANGE MULTIDISPLAY -> creates html ids for <label>s of static IP form
     item.replace(FPSTR(T_p), FPSTR(T_t));
     // item.replace(FPSTR(T_p), default);
     item.replace(FPSTR(T_t), title);
@@ -1373,12 +1386,23 @@ void WiFiManager::handleWifiSave() {
   String page;
 
   if(_ssid == ""){
-    page = getHTTPHead(FPSTR(S_titlewifisettings)); // @token titleparamsaved
-    page += FPSTR(HTTP_PARAMSAVED);
+	//page = getHTTPHead(FPSTR(S_titlewifisettings)); // @token titleparamsaved		///CHANGE MULTIDISPLAY -> prevent loading CSS an JS from SPIFFS (to slow for this site) 
+	page += FPSTR(HTTP_HEAD_START);													///CHANGE MULTIDISPLAY -> set html head start
+    page.replace(FPSTR(T_v), S_titlewifisettings);									///CHANGE MULTIDISPLAY -> set html title
+	page += FPSTR(HTTP_STYLE_LIGHT);												///CHANGE MULTIDISPLAY -> instead of loading all CSS defintions from SPIFFS
+	page += FPSTR(HTTP_HEAD_END);													///CHANGE MULTIDISPLAY -> set html head end
+	page += FPSTR(HTTP_MULTIDISPLAY);												///CHANGE MULTIDISPLAY -> new html element
+	page += FPSTR(HTTP_PARAMSAVED);
   }
   else {
-    page = getHTTPHead(FPSTR(S_titlewifisaved)); // @token titlewifisaved
-    page += FPSTR(HTTP_SAVED);
+	//page = getHTTPHead(FPSTR(S_titlewifisaved)); // @token titlewifisaved			///CHANGE MULTIDISPLAY -> prevent loading CSS an JS from SPIFFS (to slow for this site) 
+	page += FPSTR(HTTP_HEAD_START);													///CHANGE MULTIDISPLAY -> set html head start
+	page.replace(FPSTR(T_v), S_titlewifisaved);										///CHANGE MULTIDISPLAY -> set html title
+	page += FPSTR(HTTP_STYLE_LIGHT);												///CHANGE MULTIDISPLAY -> instead of loading all CSS defintions from SPIFFS
+    page += FPSTR(HTTP_HEAD_END);													///CHANGE MULTIDISPLAY -> set html head end
+	page += FPSTR(HTTP_MULTIDISPLAY);												///CHANGE MULTIDISPLAY -> new html element
+	page += FPSTR(HTTP_SAVING_CRED);												///CHANGE MULTIDISPLAY -> new html element
+	page += FPSTR(HTTP_SAVED);
   }
   page += FPSTR(HTTP_END);
 
@@ -1455,8 +1479,8 @@ void WiFiManager::handleInfo() {
   handleRequest();
   String page = getHTTPHead(FPSTR(S_titleinfo)); // @token titleinfo
   //reportStatus(page);
-  page += FPSTR(HTTP_MULTIDISPLAY);					///CHANGE MULTIDISPLAY
-  page += FPSTR(HTTP_DEVICE_INFO);					///CHANGE MULTIDISPLAY
+  page += FPSTR(HTTP_MULTIDISPLAY);					///CHANGE MULTIDISPLAY -> new html element
+  page += FPSTR(HTTP_DEVICE_INFO);					///CHANGE MULTIDISPLAY -> new html element
   uint16_t infos = 0;
 
   //@todo convert to enum or refactor to strings
@@ -1527,8 +1551,8 @@ void WiFiManager::handleInfo() {
   }
   page += F("</dl>");
   if(_showInfoErase) page += FPSTR(HTTP_ERASEBTN);
-  //page += FPSTR(HTTP_HELP);							/// CHANGE MULTIDISPLAY -> Don't show available pages
-  page += FPSTR(HTTP_BACKLINK);			///CHANGE MULTIDISPLAYS
+  //page += FPSTR(HTTP_HELP);										///CHANGE MULTIDISPLAY -> don't show available pages
+  page += FPSTR(HTTP_BACKLINK);										///CHANGE MULTIDISPLAY -> new html element
   page += FPSTR(HTTP_END);
 
   server->sendHeader(FPSTR(HTTP_HEAD_CL), String(page.length()));
@@ -1731,21 +1755,26 @@ String WiFiManager::getInfoData(String id){
  * HTTPD CALLBACK root or redirect to captive portal
  */
 void WiFiManager::handleExit() {
-  String IP_temp = WiFi.softAPIP().toString();				///CHANGE MULTIDISPLAY
+  String IP_temp = WiFi.softAPIP().toString();				///CHANGE MULTIDISPLAY -> reqired for AP IP shown as link on exit page
   DEBUG_WM(DEBUG_VERBOSE,F("<- HTTP Exit"));
   handleRequest();
-  String page = getHTTPHead(FPSTR(S_titleexit)); // @token titleexit
-  page += FPSTR(HTTP_MULTIDISPLAY);							///CHANGE MULTIDISPLAY
-  page += FPSTR(HTTP_CLOSING);								///CHANGE MULTIDISPLAY
-  page += FPSTR(HTTP_CLOSING_FWD_1);						///CHANGE MULTIDISPLAY
-  page += IP_temp;											///CHANGE MULTIDISPLAY
-  page += FPSTR(HTTP_CLOSING_FWD_2);						///CHANGE MULTIDISPLAY
-  page += IP_temp;											///CHANGE MULTIDISPLAY
-  page += FPSTR(HTTP_CLOSING_FWD_3);						///CHANGE MULTIDISPLAY
-  //page += FPSTR(S_exiting); // @token exiting															///CHANGE MULTIDISPLAY
+  //String page = getHTTPHead(FPSTR(S_titleexit)); // @token titleexit		///CHANGE MULTIDISPLAY -> prevent loading of css from SPIFFS (too slow - aborting happens before page is loaded)
+  String page = FPSTR(HTTP_HEAD_START);						///CHANGE MULTIDISPLAY -> set html head start
+  page.replace(FPSTR(T_v), S_titleexit);					///CHANGE MULTIDISPLAY -> set html title
+  page += FPSTR(HTTP_STYLE_LIGHT);							///CHANGE MULTIDISPLAY -> instead if all CSS defintions in SPIFFS
+  page += FPSTR(HTTP_HEAD_END);								///CHANGE MULTIDISPLAY -> set html head end
+  page += FPSTR(HTTP_MULTIDISPLAY);							///CHANGE MULTIDISPLAY -> new html element
+  page += FPSTR(HTTP_CLOSING);								///CHANGE MULTIDISPLAY -> new html element
+  page += FPSTR(HTTP_CLOSING_FWD_1);						///CHANGE MULTIDISPLAY -> new html element
+  page += IP_temp;											///CHANGE MULTIDISPLAY -> AP IP
+  page += FPSTR(HTTP_CLOSING_FWD_2);						///CHANGE MULTIDISPLAY -> new html element
+  page += IP_temp;											///CHANGE MULTIDISPLAY -> AP IP
+  page += FPSTR(HTTP_CLOSING_FWD_3);						///CHANGE MULTIDISPLAY -> new html element
+  page += FPSTR(HTTP_END);									///CHANGE MULTIDISPLAY -> set html end
+  //page += FPSTR(S_exiting); // @token exiting				///CHANGE MULTIDISPLAY
   server->sendHeader(FPSTR(HTTP_HEAD_CL), String(page.length()));
   server->send(200, FPSTR(HTTP_HEAD_CT), page);
-  delay(200);												///CHANGE MULTIDISPLAY
+  delay(200);												///CHANGE MULTIDISPLAY -> ensure page is loaded before aborting portal
   abort = true;
 }
 
@@ -1821,6 +1850,14 @@ void WiFiManager::handleNotFound() {
   server->sendHeader(F("Expires"), F("-1"));
   server->sendHeader(FPSTR(HTTP_HEAD_CL), String(message.length()));
   server->send ( 404, FPSTR(HTTP_HEAD_CT2), message );
+}
+
+void WiFiManager::loadCSS() {											///CHANGE MULTIDISPLAY -> load ccs file from SPIFFS
+	f = SPIFFS.open("/WMstyle.css", "r"); server->streamFile(f, "text/css");  f.close();
+}
+
+void WiFiManager::loadJS() {											///CHANGE MULTIDISPLAY -> load javascript file from SPIFFS
+	f = SPIFFS.open("/WMscript.js", "r"); server->streamFile(f, "application/javascript"); f.close();
 }
 
 /**
@@ -2003,6 +2040,7 @@ void WiFiManager::resetSettings() {
   #endif
   DEBUG_WM(F("SETTINGS ERASED"));
 }
+
 
 // SETTERS
 
@@ -2555,6 +2593,15 @@ void WiFiManager::DEBUG_WM(wm_debuglevel_t level,Generic text,Genericb textb) {
   }
   _debugPort.println();
 }
+
+/**
+ * [getStaticMode description]
+ * @access public
+ * @return {[type]} [description]
+ */
+bool WiFiManager::getStaticMode(){					///CHANGE MULTIDISPLAY -> can be called from skecth, delivers true if static IP was set
+		return _static_config;
+}		
 
 /**
  * [debugSoftAPConfig description]
