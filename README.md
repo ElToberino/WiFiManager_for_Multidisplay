@@ -6,7 +6,7 @@ Most changes I made are visual ones: some new/other css rules and some changes i
 Beside that I moved the css and javascript definitions in files on SPIFFS - they had become too large and made the portal unstable. I also added a new public function getStaticMode() returning if the connection has been made with a static IP address.
 All changes are marked with the comment ///CHANGE MULTISDISPLAY
 
-As mentioned above, this fork was especially made for my program [Tobers Multidisplay](https://github.com/ElToberino/Tobers_Multidisplay). This program uses WifiManger only for the first connection with a WiFi or if WiFi credentials have been erased by user. On normal startup it is not required to call WifiManager because ESPs store WiFi credentials persistently in flash memory. If you want to try this fork of WiFiManager for your own program, remember that you have to save the main css and javascript files on SPIFFS.<br>
+As mentioned above, this fork was especially made for my program [Tobers Multidisplay](https://github.com/ElToberino/Tobers_Multidisplay). This program uses WifiManager only for the first connection with a WiFi or if WiFi credentials have been erased by user. On normal startup it is not required to call WifiManager because ESPs store WiFi credentials persistently in flash memory. If you want to try this fork of WiFiManager for your own program, remember that you have to save the main css and javascript files on SPIFFS.<br>
 <br>
 <p align="center">
     <img src="pics/captive_portal.jpg" width="700">
