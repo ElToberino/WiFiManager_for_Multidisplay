@@ -1,7 +1,7 @@
 {
-  "name": "WifiManager",
+  "name": "WiFiManager_for_Multidisplay",
   "keywords": "wifi,wi-fi,esp,esp8266,esp32,espressif8266,espressif32,nodemcu,wemos,arduino",
-  "description": "WiFi Configuration manager with web configuration portal for ESP boards",
+  "description": "WiFi Configuration manager with web configuration portal for ESP boards. Fork of WifiManager by tzapu (development branch). ",
 "authors":
 [
     {
@@ -10,14 +10,18 @@
     },
     {
         "name": "tablatronix",
-        "url": "https://github.com/tablatronix",
+        "url": "https://github.com/tablatronix"
+    },
+    {
+        "name": "ElToberino",
+        "url": "https://github.com/ElToberino",
         "maintainer": true
-    }
+    },
 ],
 "repository":
   {
     "type": "git",
-    "url": "https://github.com/tzapu/WiFiManager.git"
+    "url": "https://github.com/ElToberino/WiFiManager_for_Multidisplay.git"
   },
   "frameworks": "arduino",
   "platforms": 
