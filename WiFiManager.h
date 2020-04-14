@@ -22,7 +22,7 @@
 #ifdef ESP8266
 #include <core_version.h>
 #endif
-//#include <FS.h>					///CHANGE MULTIDISPLAY ?
+
 #include <vector>
 
 // #define WM_MDNS            // also set MDNS with sethostname
@@ -330,6 +330,7 @@ class WiFiManager
     IPAddress     _sta_static_sn;
     IPAddress     _sta_static_dns;
 	bool		  _static_config 		  = false;   ///CHANGE MULTIDISPLAY -> flag if static IP was set
+	bool          manualExit              = false;   ///CHANGE MULTIDISPLAY -> workaround for ESP32 - see: shutdownConfigPortal() in WiFiManager.cpp		
 
     // defaults
     const byte    DNS_PORT                = 53;

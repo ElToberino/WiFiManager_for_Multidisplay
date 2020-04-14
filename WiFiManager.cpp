@@ -366,6 +366,7 @@ bool WiFiManager::startAP(){
       DEBUG_WM(DEBUG_ERROR,"[ERROR] softAPConfig failed!");
     }
   }
+  
 
   //@todo add callback here if needed to modify ap but cannot use setAPStaticIPConfig
   //@todo rework wifi channelsync as it will work unpredictably when not connected in sta
@@ -696,7 +697,7 @@ bool WiFiManager::shutdownConfigPortal(){
   server.reset();
   dnsServer->stop(); //  free heap ?
   dnsServer.reset();
-
+  
   WiFi.scanDelete(); // free wifi scan results
 
   if(!configPortalActive) return false;
@@ -707,22 +708,56 @@ bool WiFiManager::shutdownConfigPortal(){
   // [APdisconnect] set_config failed! *WM: disconnect configportal - softAPdisconnect failed
   // still no way to reproduce reliably
   DEBUG_WM(DEBUG_VERBOSE,F("disconnect configportal"));
-  bool ret = false;
+  
+ /*CHANGE MULTIDISPLAY -> #ifdef ESP32 part is a workaround for a strange behaviour of ESP32 when exiting config portal
+						  and setting up an APsimilar to the ESP32 issue "connection only every second time" in STA Mode. 
+						  WiFi.mode(WIFI_AP) is called twice: in library and - as usual - in sketch. */
+#ifdef ESP32
+  bool ret = false;												
   ret = WiFi.softAPdisconnect(false);
   if(!ret)DEBUG_WM(DEBUG_ERROR,F("[ERROR] disconnect configportal - softAPdisconnect FAILED"));
   delay(1000);
-  DEBUG_WM(DEBUG_VERBOSE,"restoring usermode",getModeString(_usermode));
-  WiFi_Mode(_usermode); // restore users wifi mode, BUG https://github.com/esp8266/Arduino/issues/4372
-  if(WiFi.status()==WL_IDLE_STATUS){
+  if(manualExit == false){
+	DEBUG_WM(DEBUG_VERBOSE,"restoring usermode",getModeString(_usermode));
+	WiFi_Mode(_usermode); // restore users wifi mode, BUG https://github.com/esp8266/Arduino/issues/4372
+	if(WiFi.status()==WL_IDLE_STATUS){
     WiFi.reconnect(); // restart wifi since we disconnected it in startconfigportal
     DEBUG_WM(DEBUG_VERBOSE,"WiFi Reconnect, was idle");
+	}
+  } else {
+	DEBUG_WM(DEBUG_VERBOSE,"WIR SCCHLIESSEN"); 
+	WiFi.mode(WIFI_AP);
+	delay(500); 
   }
   DEBUG_WM(DEBUG_VERBOSE,"wifi status:",getWLStatusString(WiFi.status()));
   DEBUG_WM(DEBUG_VERBOSE,"wifi mode:",getModeString(WiFi.getMode()));
   configPortalActive = false;
   _end();
   return ret;
-}
+} 
+
+#else
+  
+bool ret = false;
+  ret = WiFi.softAPdisconnect(false);
+  if(!ret)DEBUG_WM(DEBUG_ERROR,F("[ERROR] disconnect configportal - softAPdisconnect FAILED"));
+  delay(1000);
+  DEBUG_WM(DEBUG_VERBOSE,"restoring usermode",getModeString(_usermode));
+  WiFi_Mode(_usermode); // restore users wifi mode, BUG https://github.com/esp8266/Arduino/issues/4372
+  if(WiFi.status()==WL_IDLE_STATUS){
+  WiFi.reconnect(); // restart wifi since we disconnected it in startconfigportal
+  DEBUG_WM(DEBUG_VERBOSE,"WiFi Reconnect, was idle");
+  }
+  DEBUG_WM(DEBUG_VERBOSE,"wifi status:",getWLStatusString(WiFi.status()));
+  DEBUG_WM(DEBUG_VERBOSE,"wifi mode:",getModeString(WiFi.getMode()));
+  configPortalActive = false;
+  _end();
+  return ret;
+} 
+
+#endif
+
+ 
 
 // @todo refactor this up into seperate functions
 // one for connecting to flash , one for new client
@@ -1486,7 +1521,7 @@ void WiFiManager::handleInfo() {
   //@todo convert to enum or refactor to strings
   //@todo wrap in build flag to remove all info code for memory saving
   #ifdef ESP8266
-    infos = 27;
+    infos = 18;             //infos = 27;			///CHANGE MULTIDISPLAY -> reduced info items
     String infoids[] = {
       F("esphead"),
       F("uptime"),
@@ -1505,20 +1540,20 @@ void WiFiManager::handleInfo() {
       F("wifihead"),
       F("apip"),
       F("apmac"),
-      F("apssid"),
-      F("apbssid"),
-      F("staip"),
-      F("stagw"),
-      F("stasub"),
-      F("dnss"),
-      F("host"),
-      F("stamac"),
-      F("conx"),
-      F("autoconx")
+     // F("apssid"),
+     // F("apbssid"),
+     // F("staip"),
+     // F("stagw"),
+     // F("stasub"),
+     // F("dnss"),
+      F("host") //,
+     // F("stamac"),
+     // F("conx"),
+     // F("autoconx")
     };
 
   #elif defined(ESP32)
-    infos = 22;
+    infos = 13;				//infos = 22;			///CHANGE MULTIDISPLAY -> reduced info items
     String infoids[] = {
       F("esphead"),
       F("uptime"),
@@ -1529,20 +1564,20 @@ void WiFiManager::handleInfo() {
       F("cpufreq"),
       F("freeheap"),
       F("lastreset"),
-      // F("temp"),
+      // F("temp"),   //was already commented out before CHANGE
       F("wifihead"),
       F("apip"),
       F("apmac"),
-      F("aphost"),
-      F("apssid"),
-      F("apbssid"),
-      F("staip"),
-      F("stagw"),
-      F("stasub"),
-      F("dnss"),
-      F("host"),
-      F("stamac"),
-      F("conx")
+      F("aphost") //,
+      //F("apssid"),
+      //F("apbssid"),
+      //F("staip"),
+      //F("stagw"),
+      //F("stasub"),
+      //F("dnss"),
+      //F("host"),
+      //F("stamac"),
+      //F("conx")
     };
   #endif
 
@@ -1775,6 +1810,7 @@ void WiFiManager::handleExit() {
   server->sendHeader(FPSTR(HTTP_HEAD_CL), String(page.length()));
   server->send(200, FPSTR(HTTP_HEAD_CT), page);
   delay(200);												///CHANGE MULTIDISPLAY -> ensure page is loaded before aborting portal
+  manualExit=true;											///CHANGE MULTIDISPLAY -> workaround for ESP32 - see: shutdownConfigPortal()
   abort = true;
 }
 

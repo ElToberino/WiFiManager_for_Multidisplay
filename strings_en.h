@@ -85,7 +85,8 @@ const char HTTP_DEVICE_INFO[]	   PROGMEM = "<p class='deviceinfo'>Device Info: "
 const char HTTP_CLOSING[]		   PROGMEM = "<h3>...closing config portal...</h3>";
 const char HTTP_CLOSING_FWD_1[]	   PROGMEM = "<div class='closing'>Setting up Multidisplay in AP-Mode<br>with IP <a href=\"http://";
 const char HTTP_CLOSING_FWD_2[]	   PROGMEM = "\" style=\"text-decoration:none;\">";
-const char HTTP_CLOSING_FWD_3[]	   PROGMEM = "</a></div>";
+const char HTTP_CLOSING_FWD_3[]	   PROGMEM = "</a><br>Please wait for a moment<br>then reconnect to AP<br><progress value='0' max='10' id='ctdBar'></progress></div>";
+
 
 const char HTTP_STYLE_LIGHT[]      PROGMEM = "<style>"																										/// CHANGE MULTDISPLAY: -> new html element: less CSS for exit and saving site
 "body {text-align:center; margin:0; padding:0; background-color:#f6b54d; font-size:1em; font-family:sans-serif; color:white;} " 
@@ -94,7 +95,18 @@ const char HTTP_STYLE_LIGHT[]      PROGMEM = "<style>"																										
 ".wrap {margin:1em; background-color:#f39c12; text-align:left; display:inline-block; padding:1em; border-radius:1em;} "
 "a {color:white;} a:hover {color:#af601a;} a:active {color:#af601a;} "
 ".closing {margin-top:2em; margin-bottom:2em; text-align:center; line-height:1.5;} "
-"</style>";
+"</style>"
+"<script>"
+"var timeleft = 10;"
+"var waitTimer = setInterval(function(){"
+  "if(timeleft <= 0){"
+    "clearInterval(waitTimer);"
+  "}"
+  "document.getElementById('ctdBar').value = 10 - timeleft;"
+  "timeleft -= 1;"
+"}, 600);"
+"</script>"
+;
 
 //const char HTTP_STYLE[]            PROGMEM = "<style></style>";				/// CHANGE MULTIDISPLAY -> large(!) embedded CSS abandoned for CSS loading from SPIFFS
 
