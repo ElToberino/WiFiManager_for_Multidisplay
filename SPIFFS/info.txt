@@ -2,4 +2,5 @@ This directory containes the files WMstyle.css and WMscript.css.
 These two files must be loaded onto SPIFFS, otherwise the captive portal doesn't work properly.
 
 Please note: The sites shown on exiting captive portal can't load these files due to timimg issues. 
-They have their own (reduced and small css definitions defined in file "strings_en.h" as "const char HTTP_STYLE_LIGHT[]".
+They have their own (reduced and small) css definitions defined in file "strings_en.h" as "const char HTTP_STYLE_LIGHT[]".
+That means the css properties of body, h1, h3, .wrap, a, .closing must be defined identically in both locations.
