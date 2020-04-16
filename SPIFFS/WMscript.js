@@ -1,3 +1,9 @@
+/* 
+   Javascript file for WiFimanager_for_Multidosplay -> must be placed on SPIFFS file system
+   
+*/
+
+
 function c(l){ 
 document.getElementById('s').value=l.innerText||l.textContent; 
 p = l.nextElementSibling.classList.contains('l'); 
