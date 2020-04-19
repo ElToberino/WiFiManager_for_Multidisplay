@@ -721,11 +721,10 @@ bool WiFiManager::shutdownConfigPortal(){
 	DEBUG_WM(DEBUG_VERBOSE,"restoring usermode",getModeString(_usermode));
 	WiFi_Mode(_usermode); // restore users wifi mode, BUG https://github.com/esp8266/Arduino/issues/4372
 	if(WiFi.status()==WL_IDLE_STATUS){
-    WiFi.reconnect(); // restart wifi since we disconnected it in startconfigportal
-    DEBUG_WM(DEBUG_VERBOSE,"WiFi Reconnect, was idle");
+      WiFi.reconnect(); // restart wifi since we disconnected it in startconfigportal
+      DEBUG_WM(DEBUG_VERBOSE,"WiFi Reconnect, was idle");
 	}
   } else {
-	DEBUG_WM(DEBUG_VERBOSE,"WIR SCCHLIESSEN"); 
 	WiFi.mode(WIFI_AP);
 	delay(500); 
   }
