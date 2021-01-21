@@ -22,7 +22,7 @@ Unpack the library into your Arduino libraries folder.<br>
     <img src="showcase/howto.jpg" width="700">
 <br><br><br></p>
 
-Successfully compiled with Arduino 1.8.12, 1.8.13,  ESP8266 core for Arduino 2.6.3, 2.7.4 / Arduino core for the ESP32 1.0.4.<br>
+Successfully compiled with Arduino 1.8.12, 1.8.13 / ESP8266 core for Arduino 2.6.3, 2.7.4 / Arduino core for the ESP32 1.0.4.<br>
 For further information ta a look at the original project [WiFiManager](https://github.com/tzapu/WiFiManager/tree/development) .
 <br>
 <br>
