@@ -195,6 +195,8 @@ class WiFiManager
 	bool		  getStaticMode();										///CHANGE MULTIDISPLAY					
 	//file definition for SPIFFS										///CHANGE MULTIDISPLAY
 	File          f;													///CHANGE MULTIDISPLAY
+	//shows if Config Portal has timed out								///CHANGE MULTIDISPLAY
+	bool 		  getTimeoutState();										///CHANGE MULTIDISPLAY
 
     // SET CALLBACKS
 
@@ -330,7 +332,8 @@ class WiFiManager
     IPAddress     _sta_static_sn;
     IPAddress     _sta_static_dns;
 	bool		  _static_config 		  = false;   ///CHANGE MULTIDISPLAY -> flag if static IP was set
-	bool          manualExit              = false;   ///CHANGE MULTIDISPLAY -> workaround for ESP32 - see: shutdownConfigPortal() in WiFiManager.cpp		
+	bool          manualExit              = false;   ///CHANGE MULTIDISPLAY -> workaround for ESP32 - see: shutdownConfigPortal() in WiFiManager.cpp
+	bool		  timeoutFlag 		  	  = false;   ///CHANGE MULTIDISPLAY -> flag if config portal has timed out
 
     // defaults
     const byte    DNS_PORT                = 53;
