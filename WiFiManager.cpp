@@ -457,7 +457,8 @@ boolean WiFiManager::configPortalHasTimeout(){
 
     if(millis() > _configPortalStart + _configPortalTimeout){
       DEBUG_WM(F("config portal has timed out"));
-      return true;
+      timeoutFlag = true;													// CHANGE MULTIDISPLAY
+	  return true;
     } else if(_debugLevel > 0) {
       // log timeout
       if(_debug){
@@ -2635,7 +2636,11 @@ void WiFiManager::DEBUG_WM(wm_debuglevel_t level,Generic text,Genericb textb) {
  */
 bool WiFiManager::getStaticMode(){					///CHANGE MULTIDISPLAY -> can be called from skecth, delivers true if static IP was set
 		return _static_config;
-}		
+}
+
+bool WiFiManager::getTimeoutState(){					///CHANGE MULTIDISPLAY -> can be called from skecth, delivers true if config portal has timed out
+		return timeoutFlag;
+}				
 
 /**
  * [debugSoftAPConfig description]
