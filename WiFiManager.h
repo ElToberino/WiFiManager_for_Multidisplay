@@ -49,6 +49,8 @@
     }
     #include <ESP8266WiFi.h>
     #include <ESP8266WebServer.h>
+	
+	#include <LittleFS.h>									///CHANGE MULTIDISPLAY -> required for loading css and javascript from LittleFS
 
     #ifdef WM_MDNS
         #include <ESP8266mDNS.h>
@@ -62,7 +64,7 @@
     #include <WiFi.h>
     #include <esp_wifi.h>  
 	
-	#include <SPIFFS.h>					// CHANGE MULTIDISPLAY -> required for loading css and javascript from SPIFFS
+	#include <SPIFFS.h>										///CHANGE MULTIDISPLAY -> required for loading css and javascript from SPIFFS
     
     #define WIFI_getChipId() (uint32_t)ESP.getEfuseMac()
     #define WM_WIFIOPEN   WIFI_AUTH_OPEN
@@ -196,9 +198,11 @@ class WiFiManager
 	//file definition for SPIFFS										///CHANGE MULTIDISPLAY
 	File          f;													///CHANGE MULTIDISPLAY
 	//shows if Config Portal has timed out								///CHANGE MULTIDISPLAY
-	bool 		  getTimeoutState();										///CHANGE MULTIDISPLAY
-
-    // SET CALLBACKS
+	bool 		  getTimeoutState();									///CHANGE MULTIDISPLAY
+	// use LittleFS instead of SPIFFS									///CHANGE MULTIDISPLAY
+    void		  useLittleFS();										///CHANGE MULTIDISPLAY
+	
+	// SET CALLBACKS
 
     //called after AP mode and config portal has started
     void          setAPCallback( std::function<void(WiFiManager*)> func );
@@ -334,6 +338,7 @@ class WiFiManager
 	bool		  _static_config 		  = false;   ///CHANGE MULTIDISPLAY -> flag if static IP was set
 	bool          manualExit              = false;   ///CHANGE MULTIDISPLAY -> workaround for ESP32 - see: shutdownConfigPortal() in WiFiManager.cpp
 	bool		  timeoutFlag 		  	  = false;   ///CHANGE MULTIDISPLAY -> flag if config portal has timed out
+	bool		  LittleFSFlag			  = false;	 ///CHANGE MULTIDISPLAY -> flag if LittleFS is used instead of SPIFFS
 
     // defaults
     const byte    DNS_PORT                = 53;

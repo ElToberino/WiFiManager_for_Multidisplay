@@ -1889,11 +1889,27 @@ void WiFiManager::handleNotFound() {
 }
 
 void WiFiManager::loadCSS() {											///CHANGE MULTIDISPLAY -> load ccs file from SPIFFS
-	f = SPIFFS.open("/WMstyle.css", "r"); server->streamFile(f, "text/css");  f.close();
+	if (LittleFSFlag == true){
+		#ifdef ESP8266
+		 f = LittleFS.open("/WMstyle.css", "r"); server->streamFile(f, "text/css"); 
+		 f.close();
+		#endif
+	} else {
+		f = SPIFFS.open("/WMstyle.css", "r"); server->streamFile(f, "text/css"); 
+		f.close();
+	}
 }
 
 void WiFiManager::loadJS() {											///CHANGE MULTIDISPLAY -> load javascript file from SPIFFS
-	f = SPIFFS.open("/WMscript.js", "r"); server->streamFile(f, "application/javascript"); f.close();
+	if (LittleFSFlag == true){
+		#ifdef ESP8266
+		 f = LittleFS.open("/WMscript.js", "r"); server->streamFile(f, "application/javascript");
+		 f.close();
+		#endif
+	} else {
+		f = SPIFFS.open("/WMscript.js", "r"); server->streamFile(f, "application/javascript");
+		f.close();
+	}
 }
 
 /**
@@ -2078,6 +2094,15 @@ void WiFiManager::resetSettings() {
 
 
 // SETTERS
+
+/**
+ * use SPIFFS instead of LittleFS															
+ * @access public
+ */
+void WiFiManager::useLittleFS() {												///CHANGE MULTIDISPLAY -> call of wifiManager.useLittleFS() enables
+  LittleFSFlag = true;															///						  loading from LittleFS instead of SPIFFS
+}
+
 
 /**
  * [setTimeout description]
@@ -2634,7 +2659,7 @@ void WiFiManager::DEBUG_WM(wm_debuglevel_t level,Generic text,Genericb textb) {
  * @access public
  * @return {[type]} [description]
  */
-bool WiFiManager::getStaticMode(){					///CHANGE MULTIDISPLAY -> can be called from skecth, delivers true if static IP was set
+bool WiFiManager::getStaticMode(){						///CHANGE MULTIDISPLAY -> can be called from skecth, delivers true if static IP was set
 		return _static_config;
 }
 
