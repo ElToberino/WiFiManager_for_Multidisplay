@@ -7,6 +7,12 @@ All changes are marked with the comment ///CHANGE MULTISDISPLAY
 
 As mentioned above, this fork was especially made for my program [Tobers Multidisplay](https://github.com/ElToberino/Tobers_Multidisplay). This program uses WifiManager only for the first connection with a WiFi or if WiFi credentials have been erased by user. On normal startup it is not required to call WifiManager because ESPs store WiFi credentials persistently in flash memory. If you want to try this fork of WiFiManager for your own program, remember that you have to save the main css and javascript files on SPIFFS.<br>
 <br>
+** Added features **
+- loading css and js files from SPIFFS
+- added function *wifiManager.getStaticMode()* delivers *true* if WiFi-connection has been made with a static IP address
+- added function *wifiManager.getTimeoutState()* delivers *true* if ConfigPortalTimeout has occured
+- added function *useLittleFS* enables LittleFS instead of SPIFFS (-> Esp8266 ONLY!)<br>
+<br>
 <p align="center">
     <img src="showcase/captive_portal.jpg" width="700">
 </p>
@@ -22,8 +28,8 @@ Unpack the library into your Arduino libraries folder.<br>
     <img src="showcase/howto.jpg" width="700">
 <br><br><br></p>
 
-Successfully compiled with Arduino 1.8.12, 1.8.13 / ESP8266 core for Arduino 2.6.3, 2.7.4 / Arduino core for the ESP32 1.0.4.<br>
-For further information ta a look at the original project [WiFiManager](https://github.com/tzapu/WiFiManager/tree/development) .
+Successfully compiled with Arduino 1.8.12, 1.8.13 / ESP8266 core for Arduino 2.6.3, 2.7.4 / Arduino core for the ESP32 1.0.5.<br>
+For further information take a look at the original project [WiFiManager](https://github.com/tzapu/WiFiManager/tree/development) .
 <br>
 <br>
 <br>
