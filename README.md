@@ -7,7 +7,7 @@ All changes are marked with the comment ///CHANGE MULTISDISPLAY
 
 As mentioned above, this fork was especially made for my program [Tobers Multidisplay](https://github.com/ElToberino/Tobers_Multidisplay). This program uses WifiManager only for the first connection with a WiFi or if WiFi credentials have been erased by user. On normal startup it is not required to call WifiManager because ESPs store WiFi credentials persistently in flash memory. If you want to try this fork of WiFiManager for your own program, remember that you have to save the main css and javascript files on SPIFFS.<br>
 <br>
-** Added features **
+**Added features**
 - loading css and js files from SPIFFS
 - added function *wifiManager.getStaticMode()* delivers *true* if WiFi-connection has been made with a static IP address
 - added function *wifiManager.getTimeoutState()* delivers *true* if ConfigPortalTimeout has occured
