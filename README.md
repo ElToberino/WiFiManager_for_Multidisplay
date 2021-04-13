@@ -25,12 +25,11 @@ If you want to try this fork of WiFiManager for your own program, remember that 
 
 Just click on "Clone or Download" -> "Download ZIP" to download the library.
 Unpack the library into your Arduino libraries folder.<br>
-<br>
-**Important Note** if you also have the original WiFiManager installed in your library: You can't have both WiFiManagers in your library folder at the same time - this will cause a compiling error. So move the WiFiManager version you don't use at the moment into another folder before compiling.<br>
-<br>
 <p align="center">
     <img src="showcase/howto.jpg" width="700">
-<br><br><br></p>
+<br></p>
+**Important Note** if you also have the original WiFiManager installed in your library: You can't have both WiFiManagers in your library folder at the same time - this will cause a compiling error. So move the WiFiManager version you don't use at the moment into another folder before compiling.<br>
+<br><br>
 
 Successfully compiled with Arduino 1.8.12, 1.8.13 / ESP8266 core for Arduino 2.6.3, 2.7.4 / Arduino core for the ESP32 1.0.5.<br>
 For further information take a look at the original project [WiFiManager](https://github.com/tzapu/WiFiManager/tree/development) .
