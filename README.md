@@ -1,13 +1,13 @@
 # WiFiManager for Multidisplay
-This is a fork of the development branch of tzapu's [WiFiManager](https://github.com/tzapu/WiFiManager/tree/development) customized for [Tobers Multidisplay](https://github.com/ElToberino/Tobers_Multidisplay). It works with ESP8266 and ESP32.<br>
+This is a fork of the development branch of tzapu's [WiFiManager](https://github.com/tzapu/WiFiManager/tree/development) customized for [Tobers Multidisplay](https://github.com/ElToberino/Tobers_Multidisplay) and [Tobers Timeswitch](https://github.com/ElToberino/Tobers_Timeswitch). It works with ESP8266 and ESP32.<br>
 <br>
 Most changes I made are visual ones: some new/other css rules and some changes in shown menu items.
 Beside that I moved the css and javascript definitions into the filesystem on Flash Memory - they had become too large and made the portal unstable. I also added a new public function getStaticMode() returning if the connection has been made with a static IP address.
 All changes are marked with the comment ///CHANGE MULTISDISPLAY<br>
 <br>
-As mentioned above, this fork was especially made for my program [Tobers Multidisplay](https://github.com/ElToberino/Tobers_Multidisplay). This program uses WifiManager only for the first connection with a WiFi or if WiFi credentials have been erased by user. On normal startup it is not required to call WifiManager because ESPs store WiFi credentials persistently in flash memory. For interesting information on how ESPs set up their WiFi connection take a short look at [this discussion](https://forum.arduino.cc/index.php?topic=652513) in the Arduino Forum.<br>
+As mentioned above, this fork was especially made for my programs. They call WifiManager only for the first connection with a WiFi or if WiFi credentials have been erased by user. On normal startup it is not required to call WifiManager because ESPs store WiFi credentials persistently in flash memory. For interesting information on how ESPs set up their WiFi connection take a short look at [this discussion](https://forum.arduino.cc/index.php?topic=652513) in the Arduino Forum.<br>
 <br>
-If you want to try this fork of WiFiManager for your own program, remember that you have to save the files "WMstyle.css" and "WMscript.js" on SPIFFS.<br>
+If you want to try this fork of WiFiManager for your own program, remember that you have to save the files "WMstyle.css" and "WMscript.js" on SPIFFS/LittleFS.<br>
 <br><br>
 **Added features**
 - loading css and js files from SPIFFS
