@@ -356,9 +356,9 @@ const char* const WIFI_MODES[] PROGMEM = { "NULL", "STA", "AP", "STA+AP" };
 //     int8_t                max_tx_power;   /**< This field is used for getting WiFi maximum transmitting power, call esp_wifi_set_max_tx_power to set the maximum transmitting power. */
 //     wifi_country_policy_t policy;  /**< country policy */
 // } wifi_country_t;
-const wifi_country_t WM_COUNTRY_US{"US",1,11,CONFIG_ESP32_PHY_MAX_TX_POWER,WIFI_COUNTRY_POLICY_AUTO};
-const wifi_country_t WM_COUNTRY_CN{"CN",1,13,CONFIG_ESP32_PHY_MAX_TX_POWER,WIFI_COUNTRY_POLICY_AUTO};
-const wifi_country_t WM_COUNTRY_JP{"JP",1,14,CONFIG_ESP32_PHY_MAX_TX_POWER,WIFI_COUNTRY_POLICY_AUTO};
+const wifi_country_t WM_COUNTRY_US{"US",1,11,CONFIG_ESP32_PHY_MAX_WIFI_TX_POWER,WIFI_COUNTRY_POLICY_AUTO};
+const wifi_country_t WM_COUNTRY_CN{"CN",1,13,CONFIG_ESP32_PHY_MAX_WIFI_TX_POWER,WIFI_COUNTRY_POLICY_AUTO};
+const wifi_country_t WM_COUNTRY_JP{"JP",1,14,CONFIG_ESP32_PHY_MAX_WIFI_TX_POWER,WIFI_COUNTRY_POLICY_AUTO};
 #elif defined(ESP8266)
 // typedef struct {
 //     char cc[3];               /**< country code string */
@@ -371,4 +371,96 @@ const wifi_country_t WM_COUNTRY_CN{"CN",1,13,WIFI_COUNTRY_POLICY_AUTO};
 const wifi_country_t WM_COUNTRY_JP{"JP",1,14,WIFI_COUNTRY_POLICY_AUTO};
 #endif
 
+/*
+* ESP32 WiFi Events
+0  SYSTEM_EVENT_WIFI_READY               < ESP32 WiFi ready
+1  SYSTEM_EVENT_SCAN_DONE                < ESP32 finish scanning AP
+2  SYSTEM_EVENT_STA_START                < ESP32 station start
+3  SYSTEM_EVENT_STA_STOP                 < ESP32 station stop
+4  SYSTEM_EVENT_STA_CONNECTED            < ESP32 station connected to AP
+5  SYSTEM_EVENT_STA_DISCONNECTED         < ESP32 station disconnected from AP
+6  SYSTEM_EVENT_STA_AUTHMODE_CHANGE      < the auth mode of AP connected by ESP32 station changed
+7  SYSTEM_EVENT_STA_GOT_IP               < ESP32 station got IP from connected AP
+8  SYSTEM_EVENT_STA_LOST_IP              < ESP32 station lost IP and the IP is reset to 0
+9  SYSTEM_EVENT_STA_WPS_ER_SUCCESS       < ESP32 station wps succeeds in enrollee mode
+10 SYSTEM_EVENT_STA_WPS_ER_FAILED        < ESP32 station wps fails in enrollee mode
+11 SYSTEM_EVENT_STA_WPS_ER_TIMEOUT       < ESP32 station wps timeout in enrollee mode
+12 SYSTEM_EVENT_STA_WPS_ER_PIN           < ESP32 station wps pin code in enrollee mode
+13 SYSTEM_EVENT_AP_START                 < ESP32 soft-AP start
+14 SYSTEM_EVENT_AP_STOP                  < ESP32 soft-AP stop
+15 SYSTEM_EVENT_AP_STACONNECTED          < a station connected to ESP32 soft-AP
+16 SYSTEM_EVENT_AP_STADISCONNECTED       < a station disconnected from ESP32 soft-AP
+17 SYSTEM_EVENT_AP_STAIPASSIGNED         < ESP32 soft-AP assign an IP to a connected station
+18 SYSTEM_EVENT_AP_PROBEREQRECVED        < Receive probe request packet in soft-AP interface
+19 SYSTEM_EVENT_GOT_IP6                  < ESP32 station or ap or ethernet interface v6IP addr is preferred
+20 SYSTEM_EVENT_ETH_START                < ESP32 ethernet start
+21 SYSTEM_EVENT_ETH_STOP                 < ESP32 ethernet stop
+22 SYSTEM_EVENT_ETH_CONNECTED            < ESP32 ethernet phy link up
+23 SYSTEM_EVENT_ETH_DISCONNECTED         < ESP32 ethernet phy link down
+24 SYSTEM_EVENT_ETH_GOT_IP               < ESP32 ethernet got IP from connected AP
+25 SYSTEM_EVENT_MAX
+
+typedef enum {
+    ARDUINO_EVENT_WIFI_READY = 0,
+    ARDUINO_EVENT_WIFI_SCAN_DONE,
+    ARDUINO_EVENT_WIFI_STA_START,
+    ARDUINO_EVENT_WIFI_STA_STOP,
+    ARDUINO_EVENT_WIFI_STA_CONNECTED,
+    ARDUINO_EVENT_WIFI_STA_DISCONNECTED,
+    ARDUINO_EVENT_WIFI_STA_AUTHMODE_CHANGE,
+    ARDUINO_EVENT_WIFI_STA_GOT_IP,
+    ARDUINO_EVENT_WIFI_STA_GOT_IP6,
+    ARDUINO_EVENT_WIFI_STA_LOST_IP,
+    ARDUINO_EVENT_WIFI_AP_START,
+    ARDUINO_EVENT_WIFI_AP_STOP,
+    ARDUINO_EVENT_WIFI_AP_STACONNECTED,
+    ARDUINO_EVENT_WIFI_AP_STADISCONNECTED,
+    ARDUINO_EVENT_WIFI_AP_STAIPASSIGNED,
+    ARDUINO_EVENT_WIFI_AP_PROBEREQRECVED,
+    ARDUINO_EVENT_WIFI_AP_GOT_IP6,
+    ARDUINO_EVENT_WIFI_FTM_REPORT,
+    ARDUINO_EVENT_ETH_START,
+    ARDUINO_EVENT_ETH_STOP,
+    ARDUINO_EVENT_ETH_CONNECTED,
+    ARDUINO_EVENT_ETH_DISCONNECTED,
+    ARDUINO_EVENT_ETH_GOT_IP,
+    ARDUINO_EVENT_ETH_GOT_IP6,
+    ARDUINO_EVENT_WPS_ER_SUCCESS,
+    ARDUINO_EVENT_WPS_ER_FAILED,
+    ARDUINO_EVENT_WPS_ER_TIMEOUT,
+    ARDUINO_EVENT_WPS_ER_PIN,
+    ARDUINO_EVENT_WPS_ER_PBC_OVERLAP,
+    ARDUINO_EVENT_SC_SCAN_DONE,
+    ARDUINO_EVENT_SC_FOUND_CHANNEL,
+    ARDUINO_EVENT_SC_GOT_SSID_PSWD,
+    ARDUINO_EVENT_SC_SEND_ACK_DONE,
+    ARDUINO_EVENT_PROV_INIT,
+    ARDUINO_EVENT_PROV_DEINIT,
+    ARDUINO_EVENT_PROV_START,
+    ARDUINO_EVENT_PROV_END,
+    ARDUINO_EVENT_PROV_CRED_RECV,
+    ARDUINO_EVENT_PROV_CRED_FAIL,
+    ARDUINO_EVENT_PROV_CRED_SUCCESS,
+    ARDUINO_EVENT_MAX
+} arduino_event_id_t;
+typedef union {
+    wifi_event_sta_scan_done_t wifi_scan_done;
+    wifi_event_sta_authmode_change_t wifi_sta_authmode_change;
+    wifi_event_sta_connected_t wifi_sta_connected;
+    wifi_event_sta_disconnected_t wifi_sta_disconnected;
+    wifi_event_sta_wps_er_pin_t wps_er_pin;
+    wifi_event_sta_wps_fail_reason_t wps_fail_reason;
+    wifi_event_ap_probe_req_rx_t wifi_ap_probereqrecved;
+    wifi_event_ap_staconnected_t wifi_ap_staconnected;
+    wifi_event_ap_stadisconnected_t wifi_ap_stadisconnected;
+    wifi_event_ftm_report_t wifi_ftm_report;
+    ip_event_ap_staipassigned_t wifi_ap_staipassigned;
+    ip_event_got_ip_t got_ip;
+    ip_event_got_ip6_t got_ip6;
+    smartconfig_event_got_ssid_pswd_t sc_got_ssid_pswd;
+    esp_eth_handle_t eth_connected;
+    wifi_sta_config_t prov_cred_recv;
+    wifi_prov_sta_fail_reason_t prov_fail_reason;
+} arduino_event_info_t;
+*/
 #endif

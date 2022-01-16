@@ -2999,24 +2999,31 @@ String WiFiManager::WiFi_psk(bool persistent) const {
 }
 
 #ifdef ESP32
-void WiFiManager::WiFiEvent(WiFiEvent_t event,system_event_info_t info){
+ #ifdef WM_ARDUINOEVENTS
+  void WiFiManager::WiFiEvent(WiFiEvent_t event,arduino_event_info_t info){
+  #else
+  void WiFiManager::WiFiEvent(WiFiEvent_t event,system_event_info_t info){
+    #define wifi_sta_disconnected disconnected
+    #define ARDUINO_EVENT_WIFI_STA_DISCONNECTED SYSTEM_EVENT_STA_DISCONNECTED
+    #define ARDUINO_EVENT_WIFI_SCAN_DONE SYSTEM_EVENT_SCAN_DONE
+  #endif
     if(!_hasBegun){
       // DEBUG_WM(DEBUG_VERBOSE,"[ERROR] WiFiEvent, not ready");
       return;
     } 
     // DEBUG_WM(DEBUG_VERBOSE,"[EVENT]",event);
-    if(event == SYSTEM_EVENT_STA_DISCONNECTED){
-      DEBUG_WM(DEBUG_VERBOSE,"[EVENT] WIFI_REASON:",info.disconnected.reason);
-      if(info.disconnected.reason == WIFI_REASON_AUTH_EXPIRE || info.disconnected.reason == WIFI_REASON_AUTH_FAIL){
+    if(event == ARDUINO_EVENT_WIFI_STA_DISCONNECTED){
+      DEBUG_WM(DEBUG_VERBOSE,"[EVENT] WIFI_REASON:",info.wifi_sta_disconnected.reason);
+      if(info.wifi_sta_disconnected.reason == WIFI_REASON_AUTH_EXPIRE || info.wifi_sta_disconnected.reason == WIFI_REASON_AUTH_FAIL){
         _lastconxresulttmp = 7; // hack in wrong password internally, sdk emit WIFI_REASON_AUTH_EXPIRE on some routers on auth_fail
       } else _lastconxresulttmp = WiFi.status();
-      if(info.disconnected.reason == WIFI_REASON_NO_AP_FOUND) DEBUG_WM(DEBUG_VERBOSE,"[EVENT] WIFI_REASON: NO_AP_FOUND");
+      if(info.wifi_sta_disconnected.reason == WIFI_REASON_NO_AP_FOUND) DEBUG_WM(DEBUG_VERBOSE,"[EVENT] WIFI_REASON: NO_AP_FOUND");
       #ifdef esp32autoreconnect
         DEBUG_WM(DEBUG_VERBOSE,"[Event] SYSTEM_EVENT_STA_DISCONNECTED, reconnecting");
         WiFi.reconnect();
       #endif
   }
-  else if(event == SYSTEM_EVENT_SCAN_DONE){
+  else if(event == ARDUINO_EVENT_WIFI_SCAN_DONE){
     uint16_t scans = WiFi.scanComplete();
     WiFi_scanComplete(scans);
   }
