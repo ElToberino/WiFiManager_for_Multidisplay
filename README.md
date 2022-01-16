@@ -1,5 +1,5 @@
 # WiFiManager for Multidisplay
-This is a fork of the development branch of tzapu's [WiFiManager](https://github.com/tzapu/WiFiManager/tree/development) customized for [Tobers Multidisplay](https://github.com/ElToberino/Tobers_Multidisplay) and [Tobers Timeswitch](https://github.com/ElToberino/Tobers_Timeswitch). It works with ESP8266 and ESP32.<br>
+This is a fork of the (former development branch of) tzapu's [WiFiManager](https://github.com/tzapu/WiFiManager) customized for [Tobers Multidisplay](https://github.com/ElToberino/Tobers_Multidisplay) and [Tobers Timeswitch](https://github.com/ElToberino/Tobers_Timeswitch). It works with ESP8266 and ESP32.<br>
 <br>
 Most changes I made are visual ones: some new/other css rules and some changes in shown menu items.
 Beside that I moved the css and javascript definitions into the filesystem on Flash Memory - they had become too large and made the portal unstable. I also added a new public function getStaticMode() returning if the connection has been made with a static IP address.
@@ -34,7 +34,7 @@ Unpack the library into your Arduino libraries folder.<br>
 <br><br>
 
 Successfully compiled with Arduino 1.8.12-1.8.19 / ESP8266 core for Arduino 2.6.3, 2.7.4, 3.0.2 / Arduino core for the ESP32 1.0.5 - 2.0.2.<br>
-For further information take a look at the original project [WiFiManager](https://github.com/tzapu/WiFiManager/tree/development) .
+For further information take a look at the original project [WiFiManager](https://github.com/tzapu/WiFiManager) .
 <br>
 <br>
 <br>
