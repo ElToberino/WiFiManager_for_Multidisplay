@@ -33,7 +33,7 @@ Unpack the library into your Arduino libraries folder.<br>
 **Important Note** if you also have the original WiFiManager installed in your library: You can't have both WiFiManagers in your library folder at the same time - this will cause a compiling error. So move the WiFiManager version you don't use at the moment into another folder before compiling.<br>
 <br><br>
 
-Successfully compiled with Arduino 1.8.12-1.8.19 / ESP8266 core for Arduino 2.6.3 - 3.1.2, / Arduino core for the ESP32 1.0.5 - 2.0.14.<br>
+Successfully compiled with Arduino 1.8.12-1.8.19 / ESP8266 core for Arduino 2.6.3 - 3.1.2 / Arduino core for the ESP32 1.0.5 - 2.0.14.<br>
 For further information take a look at the original project [WiFiManager](https://github.com/tzapu/WiFiManager) .
 <br>
 <br>
