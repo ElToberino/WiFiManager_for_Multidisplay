@@ -13,7 +13,7 @@ If you want to try this fork of WiFiManager for your own program, remember that 
 - loading css and js files from SPIFFS
 - added function *wifiManager.getStaticMode()* delivers *true* if WiFi-connection has been made with a static IP address
 - added function *wifiManager.getTimeoutState()* delivers *true* if ConfigPortalTimeout has occured
-- added function *useLittleFS* enables LittleFS instead of SPIFFS (-> Esp8266 ONLY!)<br>
+- added function *useLittleFS* enables LittleFS instead of SPIFFS
 <br>
 <p align="center">
     <img src="showcase/captive_portal.jpg" width="700">
