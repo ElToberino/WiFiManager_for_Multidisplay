@@ -82,7 +82,7 @@ function staticCheck() {
 <form method='POST' action='wifisave'>
 <label for='s'>SSID</label>
 <input id='s' name='s' maxlength='32' autocorrect='off' autocapitalize='none' placeholder=''><br/>
-<label for='p'>Password</label><input id='p' name='p' maxlength='64' type='password' placeholder=''>
+<label for='p'>Password</label><div style='position:relative;width:calc(92% + 0.6em);margin:0.1em 0 0.8em 0;padding:0;border:none;border-radius:0;text-align:left;'><input id='p' name='p' maxlength='64' type='password' placeholder='' style='width:100%!important;margin:0!important;box-sizing:border-box;padding-right:32px;'><svg id='eye' viewBox='0 0 24 24' width='20' height='20' stroke='#af601a' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round' onclick="var p=document.getElementById('p'),s=document.getElementById('eye-slash');var i=(p.type==='password');p.type=i?'text':'password';s.style.display=i?'block':'none';" style='position:absolute;right:8px;top:50%;transform:translateY(-50%);cursor:pointer;opacity:0.85;user-select:none;-webkit-user-select:none;'><path d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'/><circle cx='12' cy='12' r='3'/><line id='eye-slash' x1='2' y1='2' x2='22' y2='22' style='display:none;'/></svg></div>
 
 <hr>
 
