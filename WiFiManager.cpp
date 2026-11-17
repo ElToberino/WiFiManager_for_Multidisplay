@@ -1890,10 +1890,10 @@ void WiFiManager::handleNotFound() {
 
 void WiFiManager::loadCSS() {											///CHANGE MULTIDISPLAY -> load ccs file from SPIFFS
 	if (LittleFSFlag == true){
-		#ifdef ESP8266
+		//#ifdef ESP8266
 		 f = LittleFS.open("/WMstyle.css", "r"); server->streamFile(f, "text/css"); 
 		 f.close();
-		#endif
+		//#endif
 	} else {
 		f = SPIFFS.open("/WMstyle.css", "r"); server->streamFile(f, "text/css"); 
 		f.close();
@@ -1902,10 +1902,10 @@ void WiFiManager::loadCSS() {											///CHANGE MULTIDISPLAY -> load ccs file 
 
 void WiFiManager::loadJS() {											///CHANGE MULTIDISPLAY -> load javascript file from SPIFFS
 	if (LittleFSFlag == true){
-		#ifdef ESP8266
+		//#ifdef ESP8266
 		 f = LittleFS.open("/WMscript.js", "r"); server->streamFile(f, "application/javascript");
 		 f.close();
-		#endif
+		//#endif
 	} else {
 		f = SPIFFS.open("/WMscript.js", "r"); server->streamFile(f, "application/javascript");
 		f.close();

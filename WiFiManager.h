@@ -77,6 +77,7 @@
     #include <WiFi.h>
     #include <esp_wifi.h>  
 	
+	#include <LittleFS.h>									///CHANGE MULTIDISPLAY -> required for loading css and javascript from LittleFS
 	#include <SPIFFS.h>										///CHANGE MULTIDISPLAY -> required for loading css and javascript from SPIFFS
     
     #define WIFI_getChipId() (uint32_t)ESP.getEfuseMac()

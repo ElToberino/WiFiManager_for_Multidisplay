@@ -50,7 +50,7 @@ const char HTTP_ITEM[]             PROGMEM = "<div><a href='#p' onclick='c(this)
 // const char HTTP_ITEM[]            PROGMEM = "<div><a href='#p' onclick='c(this)'>{v}</a> {R} {r}% {q} {e}</div>"; // test all tokens
 
 const char HTTP_FORM_START[]       PROGMEM = "<form method='POST' action='{v}'>";
-const char HTTP_FORM_WIFI[]        PROGMEM = "<label for='s'>SSID</label><input id='s' name='s' maxlength='32' autocorrect='off' autocapitalize='none' placeholder='{v}'><br/><label for='p'>Password</label><input id='p' name='p' maxlength='64' type='password' placeholder='{p}'>";
+const char HTTP_FORM_WIFI[]        PROGMEM = "<label for='s'>SSID</label><input id='s' name='s' maxlength='32' autocorrect='off' autocapitalize='none' placeholder='{v}'><br/><label for='p'>Password</label><div style='position:relative;width:calc(92% + 0.6em);margin:0.1em 0 0.8em 0;padding:0;border:none;border-radius:0;text-align:left;'><input id='p' name='p' maxlength='64' type='password' placeholder='{p}' style='width:100%!important;margin:0!important;box-sizing:border-box;padding-right:32px;'><svg id='eye' viewBox='0 0 24 24' width='20' height='20' stroke='#af601a' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round' onclick=\"var p=document.getElementById('p'),s=document.getElementById('eye-slash');var i=(p.type==='password');p.type=i?'text':'password';s.style.display=i?'block':'none';\" style='position:absolute;right:8px;top:50%;transform:translateY(-50%);cursor:pointer;opacity:0.85;user-select:none;-webkit-user-select:none;'><path d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'/><circle cx='12' cy='12' r='3'/><line id='eye-slash' x1='2' y1='2' x2='22' y2='22' style='display:none;'/></svg></div>";
 const char HTTP_FORM_WIFI_END[]    PROGMEM = "";
 const char HTTP_FORM_STATIC_HEAD[] PROGMEM = "<hr><br/>";
 const char HTTP_FORM_STATIC_END[]  PROGMEM = "<hr>";
@@ -90,11 +90,11 @@ const char HTTP_CLOSING_FWD_3[]	   PROGMEM = "</a><br>Please wait for a moment<b
 
 const char HTTP_STYLE_LIGHT[]      PROGMEM = "<style>"																										/// CHANGE MULTDISPLAY: -> new html element: less CSS for exit and saving site
 "body {text-align:center; margin:0; padding:0; background-color:#f6b54d; font-size:1em; font-family:sans-serif; color:white;} " 
-"h1 {text-align:center; font-size:180%; margin:0; padding:0; margin-bottom:0.5em; color:#af601a;} " 
-"h3 {text-align:center; font-weight:normal; margin:0; padding:0; margin-top:0.8em; margin-bottom:1em; color:white; font-size:115%;} " 
+"h1 {text-align:center; font-size:180%; margin:0 0 .5em; padding:0; color:#af601a;} " 
+"h3 {text-align:center; font-weight:normal; margin:.8em 0 1em; padding:0; color:white; font-size:115%;} " 
 ".wrap {margin:1em; background-color:#f39c12; text-align:left; display:inline-block; padding:1em; border-radius:1em;} "
-"a {color:white;} a:hover {color:#af601a;} a:active {color:#af601a;} "
-".closing {margin-top:2em; margin-bottom:2em; text-align:center; line-height:1.5;} "
+"a {color:white;} a:hover,a:active {color:#af601a;} "
+".closing {margin:2em 0; text-align:center; line-height:1.5;} "
 "</style>"
 "<script>"
 "var timeleft = 10;"
